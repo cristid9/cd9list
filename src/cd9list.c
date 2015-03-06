@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cd9list.h"
 
 void cd9list_foreach(CD9List *list, CD9Callback func, void *userData) 
@@ -40,10 +41,20 @@ void *cd9list_get(void *self, size_t index)
     return NULL;
 }
 
-void cd9list_append(void *self, void *data)
+void cd9list_appendCopy(void *self, void *data, size_t size)
 {
     CD9List *list = (CD9List *)self;
-    CD9Node *newNode = cd9list_createNode(data, SIZE_ZERO);
+    if(size == SIZE_ZERO) {
+        CD9Node *newNode = cd9list_createNode(data, SIZE_ZERO);
+    }
+    else {
+        // The user want us to make a copy of his data.
+        void *holder = malloc(size);
+        memmove(holder, data, size);
+
+        CD9Node *newNode = cd9list_createNode(holder, size);
+    
+    }
     CD9Node *lastNode;
 
     if(list->nodes == NULL) {
@@ -67,7 +78,7 @@ void cd9list_append(void *self, void *data)
     // element.
     list->length++;
 }
-/*
+
 void cd9list_appendCopy(void *self, void *data, size_t size)
 {
     CD9List *list = (CD9List *)self;
@@ -75,9 +86,12 @@ void cd9list_appendCopy(void *self, void *data, size_t size)
     void *holder = malloc(size);
     memmove(holder, value, size);
     
+    CD9Node *newNode = cd9list_createNode(holder, SIZE_ZERO);
+
+    list->append()
 
 }
-*/
+
 void cd9list_prepend(void *self, void *data)
 {
     CD9List *list = (CD9List *)self;
