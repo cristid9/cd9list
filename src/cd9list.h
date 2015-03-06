@@ -1,3 +1,5 @@
+#ifndef CD9LIST_H_
+#define CD9LIST_H_
 
 /**
  * @brief Use to express the fact that the size of a node is 0.
@@ -158,3 +160,5 @@ void cd9list_deleteNode(CD9Node *node);
  * @return void It doesn't return anything.
  */
 void cd9list_foreach(CD9List *list, CD9Callback func, void  *userData);
+
+#endif // CD9LIST_H_
