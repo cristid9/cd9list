@@ -91,6 +91,9 @@ typedef struct CD9List {
     void (*remove)(void *self, size_t index);
 } CD9List;
 
+#define FOREACH(list, node) for(CD9Node *node = list->nodes; node != NULL; \
+                                node = node->next)
+
 /**
  * @brief This is the callback that will be passed when calling 
  *        `cd9list_foreach`. This callback will be called on every item on the
