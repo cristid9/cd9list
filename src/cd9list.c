@@ -79,17 +79,10 @@ void cd9list_appendCopy(void *self, void *data, size_t size)
     list->length++;
 }
 
-void cd9list_appendCopy(void *self, void *data, size_t size)
+void cd9list_append(void *self, void *data)
 {
     CD9List *list = (CD9List *)self;
-
-    void *holder = malloc(size);
-    memmove(holder, value, size);
-    
-    CD9Node *newNode = cd9list_createNode(holder, SIZE_ZERO);
-
-    list->append()
-
+    list->appendCopy(list, data, SIZE_ZERO);
 }
 
 void cd9list_prepend(void *self, void *data)
