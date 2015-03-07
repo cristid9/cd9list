@@ -93,14 +93,14 @@ typedef struct CD9List {
     void (*remove)(void *self, size_t index);
 } CD9List;
 
-#define FORECH1(list, node) for(CD9Node *node = list->nodes; node != NULL; \
+#define CD9FORECH1(list, node) for(CD9Node *node = list->nodes; node != NULL; \
                                 node = node->next)
 
-#define FOREACH2(list, node, index) for(CD9Node *node = list->nodes, size_t \
+#define CD9FOREACH2(list, node, index) for(CD9Node *node = list->nodes, size_t \
                                         index; node != NULL; node = \
                                         node->next, index++)
 
-#define FOREACH(...) FOREACH##__VA_NARG__(__VA_ARGS__) 
+#define CD9FOREACH(...) FOREACH##__VA_NARG__(__VA_ARGS__) 
 
 /**
  * @brief This is the callback that will be passed when calling 
