@@ -28,6 +28,16 @@ CD9Node *cd9list_createNode(void *data, size_t size)
     return node;
 }
 
+CD9Node *cd9list_getNode(CD9List *list, size_t index) 
+{
+   CD9FOREACH(list, node, i) {
+        if(i == index) {
+            return node;
+        }
+    }
+}
+
+
 void *cd9list_get(void *self, size_t index)
 {
     CD9List *list = (CD9List *)self;
@@ -135,7 +145,7 @@ void cd9list_insert(void *self, size_t index, void *data)
     CD9Node *newNode = cd9list_createNode(data, SIZE_ZERO);
     size_t i = 0;
     
-    for(CD9Node *node = list->nodes; node != NULL; node = node->next) {
+    FOREACH(list, node) {
         if(index - 1 == i) {
             tmp = node->next;
             node->next = newNode;
