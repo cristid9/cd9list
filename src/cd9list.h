@@ -1,6 +1,8 @@
 #ifndef CD9LIST_H_
 #define CD9LIST_H_
 
+#include "va_numargs.h"
+
 /**
  * @brief Use to express the fact that the size of a node is 0.
  */
@@ -91,8 +93,14 @@ typedef struct CD9List {
     void (*remove)(void *self, size_t index);
 } CD9List;
 
-#define FOREACH(list, node) for(CD9Node *node = list->nodes; node != NULL; \
+#define FORECH1(list, node) for(CD9Node *node = list->nodes; node != NULL; \
                                 node = node->next)
+
+#define FOREACH2(list, node, index) for(CD9Node *node = list->nodes, size_t \
+                                        index; node != NULL; node = \
+                                        node->next, index++)
+
+#define FOREACH(...) FOREACH##__VA_NARG__(__VA_ARGS__) 
 
 /**
  * @brief This is the callback that will be passed when calling 
