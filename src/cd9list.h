@@ -2,6 +2,7 @@
 #define CD9LIST_H_
 
 #include "va_numargs.h"
+#include "macro_dispatcher.h"
 
 /**
  * @brief Use to express the fact that the size of a node is 0.
@@ -93,14 +94,16 @@ typedef struct CD9List {
     void (*remove)(void *self, size_t index);
 } CD9List;
 
-#define CD9FORECH1(list, node) for(CD9Node *node = list->nodes; node != NULL; \
-                                node = node->next)
+#define CD9FOREACH2(list, node) for(CD9Node *node = list->nodes; node != NULL; \
+                                    node = node->next)
 
-#define CD9FOREACH2(list, node, index) for(CD9Node *node = list->nodes, size_t \
-                                        index; node != NULL; node = \
-                                        node->next, index++)
+#define CD9FOREACH3(list, node, index) CD9Node *node;\
+                                       size_t index; \
+                                       for(node = list->nodes, index = 0;\
+                                           node != NULL; node = \
+                                           node->next, index++)
 
-#define CD9FOREACH(...) FOREACH##__VA_NARG__(__VA_ARGS__) 
+#define CD9FOREACH(...) MACRO_DISPATCHER(CD9FOREACH, __VA_ARGS__) 
 
 /**
  * @brief This is the callback that will be passed when calling 
