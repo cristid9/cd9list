@@ -148,37 +148,31 @@ void cd9list_insertCopy(void *self, size_t index, void *data, size_t size)
     list->length++;
 }
 
-void cd9list_remove(void *self, size_t index)
+int cd9list_remove(void *self, size_t index)
 {
     CD9List *list = (CD9List *)self;
-    if(index > list->length) {
-        return; // Not a valid index.
-    }
-
-    CD9Node *toRemove;
-    if(index == 0) {
-        toRemove = list->nodes;
-        list->nodes = toRemove->next;
-        cd9list_deleteNode(toRemove);
     
+    if(index < 0 || index > (list->length - 1)) {
+        return 0; // Not a valid index;
+    } 
+
+    if(index == 0) {
+        CD9Node *toDelete = list->nodes;
+        list->nodes = toDelete->next;
+        cd9list_deleteNode(toDelete);
         list->length--;
-
-        return;
     }
+    else {
+        CD9Node *prev = cd9list_getNode(list, index - 1);
+        CD9Node *toDelete = cd9list_getNode(list, index);
 
-    size_t i = 0;
-    for(CD9Node *node = list->nodes; node != NULL; node = node->next) {
-        if(i == index - 1) {
-            toRemove = node->next;
-            node->next = toRemove->next;
-            cd9list_deleteNode(toRemove);
-            
-            list->length--;
+        prev->next = toDelete->next;
+        cd9list_deleteNode(toDelete);
         
-            return;
-        }   
-        i++;        
+        list->length--;
     }
+
+    return 1; // Removed successfully.
 }
 
 size_t cd9list_find(void *self, void *data)
@@ -192,6 +186,7 @@ size_t cd9list_find(void *self, void *data)
         }
         i++;
     }
+
 
     return -1;
 }

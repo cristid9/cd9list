@@ -89,9 +89,10 @@ typedef struct CD9List {
      * @param self The current list.
      * @param index The index of the element thet you want to remove.
      *
-     * @return void It doesn't return anything.
+     * @return int It returns `0` if the index you've passed is invalid or `1`
+     *         otherwise.
      */
-    void (*remove)(void *self, size_t index);
+    int (*remove)(void *self, size_t index);
 
     /**
      * @brief Normally, when you use functions like `append` or `prepend` you

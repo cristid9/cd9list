@@ -157,6 +157,44 @@ static char *test_foreach()
 
 }
 
+static char *test_remove()
+{
+    const char *data[] = {"foo", "bar", "baz", "bax", "bay"};    
+    int status;
+    
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 5; i++) {
+        list->_insertCopy(list, list->length, (void *)data[i], SIZE_ZERO);
+    }
+
+    status = list->remove(list, 0);
+    status = list->remove(list, 1); // The middle one.
+    status = list->remove(list, 2); // The last one.
+
+    CD9Node *node1 = cd9list_getNode(list, 0);
+    CD9Node *node2 = cd9list_getNode(list, 1);
+
+    mu_assert("[test_remove] List element at index 0 is not equal to bar", 
+              (char *)node1->data == data[1]);
+    
+    mu_assert("[test_remove] List element at index 1 is not equal to bax", 
+              (char *)node2->data == data[3]);
+
+    mu_assert("[test_remove] List length was not set propelry after the \
+              removal of some elements", list->length == 2);
+
+    mu_assert("[test_remove] Returned wrong status code", status == 1);
+
+    status = list->remove(list, 3); // There is not element 3, error expected.
+
+    mu_assert("[test_remove] Should've returned error code", status == 0);
+
+    cd9list_deleteList(list);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -165,6 +203,7 @@ static char *all_tests() {
 //    mu_run_test(test_get);
     mu_run_test(test_getNode);
     mu_run_test(test_insertCopy);
+    mu_run_test(test_remove);
 
     return 0;
 }
