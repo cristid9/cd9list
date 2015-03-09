@@ -92,6 +92,25 @@ typedef struct CD9List {
      * @return void It doesn't return anything.
      */
     void (*remove)(void *self, size_t index);
+
+    /**
+     * @brief Normally, when you use functions like `append` or `prepend` you
+     *        just add a pointer to the data. If that data is destroyed the
+     *        list element will be useless, since the data it points to doesn't
+     *        exist anymore. Using this function to add a new element the list
+     *        will make a copy of the data itself. Thus, even if you delete
+     *        the original data, it won't matter because the list element
+     *        points to data allocated by itself.    
+     *
+     * @param self The current list.
+     * @param index The position where you want to insert the new item.
+     * @param value The value you want to insert.
+     * @param size The size of the data you want to insert, thus the function
+     *        will know how much memory should allocate when creating the copy.
+     *
+     * @return void It doesn't return anything.
+     */ 
+    void (*_insertCopy)(void *self, size_t index, void *value, size_t size);
 } CD9List;
 
 #define CD9FOREACH2(list, node) for(CD9Node *node = list->nodes; node != NULL; \
