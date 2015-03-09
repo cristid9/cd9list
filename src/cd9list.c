@@ -234,5 +234,10 @@ void cd9list_deleteList(CD9List *list)
 
 void cd9list_deleteNode(CD9Node *node)
 {
+    if(node->size != SIZE_ZERO) {
+        // Free the data allocated by cd9list_insertCopy.
+        free(node->data);    
+    }
+
     free(node);
 }
