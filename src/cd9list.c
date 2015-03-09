@@ -52,53 +52,11 @@ void *cd9list_get(void *self, size_t index)
     return NULL;
 }
 
-/*
-void cd9list_appendCopy(void *self, void *data, size_t size)
-{
-    CD9List *list = (CD9List *)self;
-    if(size == SIZE_ZERO) {
-        CD9Node *newNode = cd9list_createNode(data, SIZE_ZERO);
-    }
-    else {
-        // The user want us to make a copy of his data.
-        void *holder = malloc(size);
-        memmove(holder, data, size);
-
-        CD9Node *newNode = cd9list_createNode(holder, size);
-    
-    }
-    CD9Node *lastNode;
-
-    if(list->nodes == NULL) {
-        // If the list is empty it means that the `nodes` memebers doesn't
-        // point to any node.
-        list->nodes = newNode;
-    }
-    else {
-        for(CD9Node *node = list->nodes; node != NULL; node = node->next) {
-            if(node->next == NULL) {
-                // That's the last node.
-                lastNode = node;
-            }    
-        }
-
-        // Now bind the new node to the last one.
-        lastNode->next = newNode;
-    }
-
-    // We should also increase the length of the list every time we add a new
-    // element.
-    list->length++;
-}
-*/
-
-/*
 void cd9list_append(void *self, void *data)
 {
     CD9List *list = (CD9List *)self;
-    list->appendCopy(list, data, SIZE_ZERO);
+    list->_insertCopy(list, list->length, data, SIZE_ZERO);
 }
-*/
 
 void cd9list_prepend(void *self, void *data)
 {
@@ -202,7 +160,7 @@ CD9List *cd9list_createList()
     list->nodes  = NULL;
 
     // Now bind the functions;
-//    list->append         = cd9list_append;
+    list->append         = cd9list_append;
     list->prepend        = cd9list_prepend;
     list->get            = cd9list_get;
 //    list->insert         = cd9list_insert;

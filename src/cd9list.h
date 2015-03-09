@@ -26,7 +26,7 @@ typedef struct CD9List {
     
     /**
      * @brief Call this function whenever you want to append something to the
-     *        end of the list
+     *        end of the list. This is just a wrapper for `_insertCopy`.
      *
      * @param self A pointer to the list.
      * @param data The data you want to append. It must be typecsted to void *.

@@ -84,24 +84,23 @@ static char *test_insertCopy()
 
 static char *test_append()
 {
-    const char *data = "foo";
-    CD9Node *lastNode;
+    const char *data[] = {"foo", "bar", "baz"};
 
-    CD9List *list = cd9list_createList();
-    list->append(list, (void *)data);
+    CD9List *list = cd9list_createList();    
 
-    // Go to the las node.
-    for(CD9Node *node = list->nodes; node != NULL; node = node->next) {
-        if(node->next == NULL) {
-            // We have found the last node.
-            lastNode = node;
-        }
+    for(int i = 0; i < 3; i++) {
+        list->append(list, (void *)data[i]);
     }
-   
-    mu_assert("The value was not appended properly",
-        (char *)lastNode->data == data);
-    mu_assert("The length of the list was not set properly",
-        list->length == 1);
+
+    CD9FOREACH(list, node, index) {
+        mu_assert("[test_append] Data was not appended properly", 
+                  (char *)node->data == data[index]);
+    }
+
+    mu_assert("[test_append] List length was not set properly", 
+              list->length == 3);
+
+    cd9list_deleteList(list);
 
     return 0;
 }
@@ -204,6 +203,7 @@ static char *all_tests() {
     mu_run_test(test_getNode);
     mu_run_test(test_insertCopy);
     mu_run_test(test_remove);
+    mu_run_test(test_append);
 
     return 0;
 }
