@@ -28,6 +28,29 @@ static char *test_createList()
     return 0;
 }
 
+static char *test_getNode()
+{
+    const char *data[] = {"foo", "bar", "baz"};
+    
+    CD9List *list = cd9list_createList();
+    CD9Node *node = cd9list_createNode((void *)data[0], SIZE_ZERO);
+
+    CD9Node *node1 = cd9list_createNode((void *)data[0], SIZE_ZERO);
+    CD9Node *node2 = cd9list_createNode((void *)data[1], SIZE_ZERO);
+    CD9Node *node3 = cd9list_createNode((void *)data[2], SIZE_ZERO);    
+
+    node1->next = node2;
+    node2->next = node3;
+
+    list->nodes = node1;
+
+    CD9Node *queryNode = cd9list_getNode(list, 0);
+
+    mu_assert("[test_getNode]", node->data == queryNode->data);
+
+    return 0;
+}
+
 static char *test_append()
 {
     const char *data = "foo";
@@ -106,9 +129,10 @@ static char *test_foreach()
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
-    mu_run_test(test_append);
-    mu_run_test(test_prepend);
-    mu_run_test(test_get);
+//    mu_run_test(test_append);
+//    mu_run_test(test_prepend);
+//    mu_run_test(test_get);
+    mu_run_test(test_getNode);
     return 0;
 }
  

@@ -35,8 +35,9 @@ CD9Node *cd9list_getNode(CD9List *list, size_t index)
             return node;
         }
     }
-}
 
+    return NULL;
+}
 
 void *cd9list_get(void *self, size_t index)
 {
@@ -51,6 +52,7 @@ void *cd9list_get(void *self, size_t index)
     return NULL;
 }
 
+/*
 void cd9list_appendCopy(void *self, void *data, size_t size)
 {
     CD9List *list = (CD9List *)self;
@@ -88,12 +90,15 @@ void cd9list_appendCopy(void *self, void *data, size_t size)
     // element.
     list->length++;
 }
+*/
 
+/*
 void cd9list_append(void *self, void *data)
 {
     CD9List *list = (CD9List *)self;
     list->appendCopy(list, data, SIZE_ZERO);
 }
+*/
 
 void cd9list_prepend(void *self, void *data)
 {
@@ -117,6 +122,7 @@ void cd9list_prepend(void *self, void *data)
     list->length++;
 }
 
+/*
 void cd9list_insert(void *self, size_t index, void *data)
 {
     CD9List *list = (CD9List *)self;
@@ -145,7 +151,7 @@ void cd9list_insert(void *self, size_t index, void *data)
     CD9Node *newNode = cd9list_createNode(data, SIZE_ZERO);
     size_t i = 0;
     
-    FOREACH(list, node) {
+    CD9FOREACH(list, node) {
         if(index - 1 == i) {
             tmp = node->next;
             node->next = newNode;
@@ -156,7 +162,7 @@ void cd9list_insert(void *self, size_t index, void *data)
         i++;
     }
 }
-
+*/
 void cd9list_remove(void *self, size_t index)
 {
     CD9List *list = (CD9List *)self;
@@ -216,10 +222,10 @@ CD9List *cd9list_createList()
     list->nodes  = NULL;
 
     // Now bind the functions;
-    list->append         = cd9list_append;
+//    list->append         = cd9list_append;
     list->prepend        = cd9list_prepend;
     list->get            = cd9list_get;
-    list->insert         = cd9list_insert;
+//    list->insert         = cd9list_insert;
     list->remove         = cd9list_remove;    
     list->find           = cd9list_find;
 

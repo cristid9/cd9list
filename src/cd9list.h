@@ -158,6 +158,20 @@ void cd9list_deleteList(CD9List *list);
  */
 void cd9list_deleteNode(CD9Node *node);
 
+
+/**
+ * @brief Use this function to get the node at the position `index`. This  
+ *        function is intended to be used internally, a normal user should
+ *        never use it.
+ *
+ * @param list The list where you wan to retrieve the node from.
+ * @param index The position where the desired node is located.
+ *
+ * @return CD9Node * A pointer to the desired node.
+ */
+CD9Node *cd9list_getNode(CD9List *list, size_t index);
+
+
 /**
  * @brief Use this function to iterate over all the elements in the list.
  *
