@@ -19,9 +19,16 @@ CD9Node *cd9list_createNode(void *data, size_t size)
         return NULL;
     }
 
+    // Thus we can know when we reach the end of the list.
+    if(size != SIZE_ZERO) {
+        void *copy = malloc(size);
+        memmove(copy, data, size);
+
+        node->data = copy;
+    }
+    
     node->data = data;
 
-    // Thus we can know when we reach the end of the list.
     node->next = NULL;
     node->size = size;
 
@@ -37,6 +44,20 @@ CD9Node *cd9list_getNode(CD9List *list, size_t index)
     }
 
     return NULL;
+}
+
+void *cd9list_copyNodeData(CD9Node *node)
+{
+    // The user was careless, he shouldn't call this function on an empty
+    // node.
+    if(node->size == SIZE_ZERO) {
+        return NULL; 
+    }
+
+    void *data = malloc(node->size);
+    memmove(data, node->data, node->size);
+
+    return data;
 }
 
 void *cd9list_get(void *self, size_t index)
