@@ -42,14 +42,9 @@ CD9Node *cd9list_getNode(CD9List *list, size_t index)
 void *cd9list_get(void *self, size_t index)
 {
     CD9List *list = (CD9List *)self;
+    CD9Node *node = cd9list_getNode(list, index);
     
-    for(CD9Node *node = list->nodes; node != NULL; node = node->next) {
-        if(index == 0) {
-            return node->data;
-        } 
-        index--;
-    }
-    return NULL;
+    return node->data;
 }
 
 void cd9list_append(void *self, void *data)

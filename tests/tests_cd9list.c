@@ -209,7 +209,7 @@ static char *all_tests() {
     mu_run_test(test_createList);
     mu_run_test(test_append);
     mu_run_test(test_prepend);
-//    mu_run_test(test_get);
+    mu_run_test(test_get);
     mu_run_test(test_getNode);
     mu_run_test(test_insertCopy);
     mu_run_test(test_remove);
