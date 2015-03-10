@@ -191,6 +191,27 @@ void cd9list_deleteNode(CD9Node *node);
  */
 CD9Node *cd9list_getNode(CD9List *list, size_t index);
 
+/**
+ * @brief This function is mainly used as a helper function in `pop` and 
+ *        `popleft` methods. In these functions you need to return the data
+ *        of a node before deleting it. There wouldn't be any problem if the
+ *        node just stores a pointer to the actual data, but if the data at 
+ *        that node is a pointer to memory allocated by `cd9list_inserCopy`
+ *        then if the node is deleted the data in it won't exist anymore.
+ *        To fix this I should make a copy of a that node before deleting it
+ *        and return it to the user. The problem is that the library is 
+ *        designed in such a way that the user shouldn't be concerned by
+ *        it's internals and if I return the data stored in that node then
+ *        I will have a memory leak because I won't be able to free the memory
+ *        occupied by node. The only solution is just to make a copy of a the
+ *        node data before deleting it. And that is the purpose of this 
+ *        function.
+ *
+ * @brief node The node whose data you want to copy.
+ *
+ * @brief CD9Node * A of the `node`'s data.
+ */ 
+void *cd9list_copyNodeData(CD9Node *node);
 
 /**
  * @brief Use this function to iterate over all the elements in the list.

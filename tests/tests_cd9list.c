@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "minunit.h"
 #include "../src/cd9list.h"
@@ -74,7 +75,7 @@ static char *test_insertCopy()
     for(int i = 0; i < 3; i++) {
         CD9Node *node = cd9list_getNode(list, i);
         mu_assert("[test_insertCopy] Value was not inserted properly",
-                  (char *)node->data == backup[i]);
+                  !strcmp((char *)node->data, backup[i]));
     }
 
     cd9list_deleteList(list);
@@ -204,6 +205,23 @@ static char *test_remove()
     return 0;
 }
 
+static char *test_copyNodeData()
+{
+    const char *data = "foo";
+
+    CD9Node *node = cd9list_createNode((void *)data, 4);
+    void *copy = cd9list_copyNodeData(node);
+
+    cd9list_deleteNode(node);
+
+    mu_assert("[test_copyNodeData] The node data was not copied properly", 
+              !strcmp((void *)copy, data));
+
+    free(copy);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -214,6 +232,7 @@ static char *all_tests() {
     mu_run_test(test_insertCopy);
     mu_run_test(test_remove);
     mu_run_test(test_append);
+    mu_run_test(test_copyNodeData);
 
     return 0;
 }

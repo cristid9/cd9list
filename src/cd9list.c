@@ -26,9 +26,10 @@ CD9Node *cd9list_createNode(void *data, size_t size)
 
         node->data = copy;
     }
+    else {    
+        node->data = data;
+    }
     
-    node->data = data;
-
     node->next = NULL;
     node->size = size;
 
