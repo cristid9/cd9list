@@ -61,23 +61,7 @@ void cd9list_append(void *self, void *data)
 void cd9list_prepend(void *self, void *data)
 {
     CD9List *list = (CD9List *)self;
-    CD9Node *newNode = cd9list_createNode(data, SIZE_ZERO);
-
-    if(list->nodes == NULL) {
-        list->nodes = newNode;
-    }
-    else {
-        // Used to backup the rest of the list.
-        CD9Node *tmp = list->nodes;
-
-        // Make the new node the first in the list.
-        list->nodes = newNode;
-        
-        // Bind the new node to the rest of the list.
-        list->nodes->next = tmp;
-    }
-
-    list->length++;
+    list->_insertCopy(list, 0, data, SIZE_ZERO);
 }
 
 void cd9list_insertCopy(void *self, size_t index, void *data, size_t size)

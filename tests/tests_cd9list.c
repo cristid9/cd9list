@@ -107,14 +107,24 @@ static char *test_append()
 
 static char *test_prepend()
 {
-    const char *data = "foo";
+    const char *data[] = {"bar", "baz", "bax"};
+    const char *first = "foo";
+    
     CD9List *list = cd9list_createList();
-    list->prepend(list, (void *)data);
 
-    mu_assert("Node was not inserted properly", 
-        (char *)list->nodes->data == data);
-    mu_assert("The length of the list was not modified properly", 
-        list->length == 1);
+    for(int i = 0; i < 3; i++) {
+        list->append(list, (void *)data[i]);
+    }
+
+    list->prepend(list, (void *)first);
+
+    mu_assert("[test_prepend] List length was not set properly", 
+              list->length == 4);
+
+    CD9Node *node = cd9list_getNode(list, 0);
+
+    mu_assert("[test_prepend] Element was not prepended properly", 
+              node->data == (char *)first);
 
     return 0;
 }
@@ -197,8 +207,8 @@ static char *test_remove()
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
-//    mu_run_test(test_append);
-//    mu_run_test(test_prepend);
+    mu_run_test(test_append);
+    mu_run_test(test_prepend);
 //    mu_run_test(test_get);
     mu_run_test(test_getNode);
     mu_run_test(test_insertCopy);
