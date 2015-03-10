@@ -75,6 +75,13 @@ void cd9list_append(void *self, void *data)
     list->_insertCopy(list, list->length, data, SIZE_ZERO);
 }
 
+// %todo% write tests and docs for this function.
+void cd9list_insert(void *self, size_t index, void *data)
+{
+    CD9List *list = (CD9List *)self;
+    list->_insertCopy(list, index, data, SIZE_ZERO);
+}
+
 void cd9list_prepend(void *self, void *data)
 {
     CD9List *list = (CD9List *)self;
