@@ -241,8 +241,30 @@ static char *test_pop()
               !strcmp(ptrToCopy, data));
 
     mu_assert("[test_pop] Pop returned a pointer to the wrong thing", 
-              ptrToData == data);
+              (char *)ptrToData == data);
     
+    return 0;
+}
+
+static char *test_popleft()
+{
+    const char *data = "foo";
+
+    CD9List *list = cd9list_createList();
+
+    list->append(list, (void *)data);
+    list->_insertCopy(list, list->length, (void *)data, 4);
+
+    void *ptrToData = list->popleft(list);
+    void *ptrToCopy = list->popleft(list);
+
+    mu_assert("[test_popleft] The size of the list was not set properly", 
+              list->length == 0);
+    mu_assert("[test_popleft] Popleft returned a pointer to the wrong thing", 
+              (char *)ptrToData == data);
+    mu_assert("[test_popleft] The copy and the string foo are not equal", 
+              !strcmp(ptrToCopy, data));
+
     return 0;
 }
 
@@ -258,6 +280,7 @@ static char *all_tests() {
     mu_run_test(test_append);
     mu_run_test(test_copyNodeData);
     mu_run_test(test_pop);
+    mu_run_test(test_popleft);
 
     return 0;
 }

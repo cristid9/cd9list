@@ -69,6 +69,16 @@ typedef struct CD9List {
     void *(*pop)(void *self);
 
     /**
+     * @brief Use thid function to get the first element from the list and to
+     *        delete it.
+     *
+     * @param self The current list.
+     *
+     * @return void * The value of the first element from the list.
+     *
+     */ 
+    void *(*popleft)(void *self);
+    /**
      * @brief Use this function to insert an item at the given list. If you
      *        pass an invalid index the function won't insert the value at all.
      *
