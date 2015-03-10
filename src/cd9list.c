@@ -81,6 +81,24 @@ void cd9list_prepend(void *self, void *data)
     list->_insertCopy(list, 0, data, SIZE_ZERO);
 }
 
+void *cd9list_pop(void *self)
+{
+    CD9List *list = (CD9List *)self;
+    CD9Node *node = cd9list_getNode(list, list->length - 1);
+
+    if(node->size == SIZE_ZERO) {
+        void *tmp = node->data;
+        list->remove(list, list->length - 1);
+
+        return tmp; 
+    }
+
+    void *tmp = cd9list_copyNodeData(node);
+    list->remove(list, list->length - 1);
+
+    return tmp;
+}
+
 void cd9list_insertCopy(void *self, size_t index, void *data, size_t size)
 {
     CD9List *list = (CD9List *)self;
@@ -168,6 +186,7 @@ CD9List *cd9list_createList()
     list->remove         = cd9list_remove;    
     list->find           = cd9list_find;
     list->_insertCopy    = cd9list_insertCopy;
+    list->pop            = cd9list_pop;
 
     return list;
 }

@@ -59,6 +59,16 @@ typedef struct CD9List {
     void *(*get)(void *self, size_t index);
 
     /**
+     * @brief Use this function to delete the last element in the list and to
+     *        delete it.
+     *
+     * @param self The current list.
+     *
+     * @return void * The data of the last element in the list.
+     */ 
+    void *(*pop)(void *self);
+
+    /**
      * @brief Use this function to insert an item at the given list. If you
      *        pass an invalid index the function won't insert the value at all.
      *
