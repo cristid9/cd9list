@@ -38,7 +38,7 @@ CD9Node *cd9list_createNode(void *data, size_t size)
 
 CD9Node *cd9list_getNode(CD9List *list, size_t index) 
 {
-   CD9FOREACH(list, node, i) {
+   CD9FOREACH_(list, node, i) {
         if(i == index) {
             return node;
         }

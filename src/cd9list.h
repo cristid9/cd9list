@@ -137,16 +137,62 @@ typedef struct CD9List {
     void (*_insertCopy)(void *self, size_t index, void *value, size_t size);
 } CD9List;
 
-#define CD9FOREACH2(list, node) for(CD9Node *node = list->nodes; node != NULL; \
-                                    node = node->next)
 
-#define CD9FOREACH3(list, node, index) CD9Node *node;\
+/**
+ * @brief Use this version of foreach to iterate over nodes in a list. All you
+ *        will get is a node per iteration.
+ */ 
+#define CD9FOREACH_2(list, node) for(CD9Node *node = list->nodes; \
+                                     node != NULL; node = node->next)
+/**
+ * @brief Use this version to iterate over the nodes in a list. You will get
+ *        a node and it's index per iteration. Keep in mind that this macro
+ *        is not intended to be used by the end user, since it exposes to 
+ *        many internal things.
+ */ 
+#define CD9FOREACH_3(list, node, index) CD9Node *node;\
                                        size_t index; \
-                                       for(node = list->nodes, index = 0;\
+                                       for(node = list->nodes, index = 0; \
                                            node != NULL; node = \
                                            node->next, index++)
+/**
+ * @brief This version of foreach shouldn't be used by the library user 
+ *        because it exposes him to some of the library internals, such as the
+ *        concept of node. The user shouldn't be concerned about 
+ *        implementation details.
+ *
+ */
+#define CD9FOREACH_(...) MACRO_DISPATCHER(CD9FOREACH_, __VA_ARGS__) 
 
-#define CD9FOREACH(...) MACRO_DISPATCHER(CD9FOREACH, __VA_ARGS__) 
+/**
+ * @brief Use this macro to iterate over the values in a list. The variable
+ *        `value` will a get a `void *` pointer to the each value in the list
+ *        per iteration.
+ */
+#define CD9FOREACH2(list, value) CD9Node *node = list->nodes; \
+                                for(void *value = node->data; node != NULL; \
+                                    value = ((node->next != NULL) ? \
+                                             node->next->data : NULL), \
+                                    node = node->next)
+
+/**
+ * @brief It acts similar to \ref CD9FOREACH2, the only difference is that you
+ *        will also get the indes of the `value`;
+ */ 
+#define CD9FOREACH3(list, value, index) CD9Node *node = list->nodes; \
+                                       size_t index = 0; \
+                                       for(void *value = node->data; \
+                                           node != NULL; \
+                                           value = ((node->next != NULL) ? \
+                                                    node->next->data : NULL), \
+                                           node = node->next, \
+                                           index++)
+/**
+ * @brief This version of foreach is intended to be used byt the user because
+ *        it passes the data, not the node to it, so it hides some of the
+ *        library's internals.
+ */
+#define CD9FOREACH(...) MACRO_DISPATCHER(CD9FOREACH, __VA_ARGS__)
 
 /**
  * @brief This is the callback that will be passed when calling 

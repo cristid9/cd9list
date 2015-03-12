@@ -93,7 +93,7 @@ static char *test_append()
         list->append(list, (void *)data[i]);
     }
 
-    CD9FOREACH(list, node, index) {
+    CD9FOREACH_(list, node, index) {
         mu_assert("[test_append] Data was not appended properly", 
                   (char *)node->data == data[index]);
     }
@@ -154,17 +154,44 @@ static char *test_get()
     return 0;
 }
 
-static char *test_foreach()
+static char *test_foreach2()
 {
     const char *data[] = {"foo", "bar", "baz"};
     CD9List *list = cd9list_createList();
 
-    list->append(list, (void *)data[0]);
-    list->append(list, (void *)data[1]);
-    list->append(list, (void *)data[2]);
-    
+    for(int i = 0; i < 3; i++) {
+        list->append(list, (void *)data[i]);
+    }
+    size_t i = 0;
+    CD9FOREACH(list, value) {
+        mu_assert("[test_foreach2] The data provided is not correct", 
+                  (char *)value == data[i]); 
+        i++;
+    }
+   
+    cd9list_deleteList(list);
+
     return 0;
 
+}
+
+static char *test_foreach3()
+{
+    const char *data[] = {"foo", "bar", "baz"};
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        list->append(list, (void *)data[i]);
+    }
+
+    CD9FOREACH(list, value, i) {
+        mu_assert("[test_foreach3] The data provided is not correct", 
+                  (char *)value == data[i]);
+    }
+
+    cd9list_deleteList(list);
+
+    return 0;
 }
 
 static char *test_remove()
@@ -309,6 +336,8 @@ static char *all_tests() {
     mu_run_test(test_pop);
     mu_run_test(test_popleft);
     mu_run_test(test_insert);
+    mu_run_test(test_foreach2);
+    mu_run_test(test_foreach3);
 
     return 0;
 }
