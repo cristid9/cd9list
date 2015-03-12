@@ -81,6 +81,9 @@ typedef struct CD9List {
     /**
      * @brief Use this function to insert an item at the given list. If you
      *        pass an invalid index the function won't insert the value at all.
+     *        This is a wrapper for `cd9list_insertCopy`, but it doesn't make
+     *        a copy of the data you want to store, it just stores the address
+     *        you give to him.  
      *
      * @param self The current list.
      * @param index The index where you want to insert the item.

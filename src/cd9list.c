@@ -207,7 +207,7 @@ CD9List *cd9list_createList()
     list->append         = cd9list_append;
     list->prepend        = cd9list_prepend;
     list->get            = cd9list_get;
-//    list->insert         = cd9list_insert;
+    list->insert         = cd9list_insert;
     list->remove         = cd9list_remove;    
     list->find           = cd9list_find;
     list->_insertCopy    = cd9list_insertCopy;

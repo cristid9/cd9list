@@ -268,6 +268,33 @@ static char *test_popleft()
     return 0;
 }
 
+static char *test_insert()
+{
+    const char *toInsert[] = {"head", "middle", "end"};
+    const char *initialData[] = {"foo", "bar", "baz"};
+
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        list->append(list, (void *)initialData[i]);
+    }
+
+    list->insert(list, 0, (void *)toInsert[0]);
+    list->insert(list, 2, (void *)toInsert[1]);
+    list->insert(list, list->length, (void *)toInsert[2]);
+
+    mu_assert("[test_insert] The list length was not set properly", 
+              list->length == 6);
+    mu_assert("[test_insert] toInsert[0] was not inserted properly", 
+              (char *)list->get(list, 0) == toInsert[0]);
+    mu_assert("[test_insert] toInsert[1] was not inserted properly", 
+              (char *)list->get(list, 2) == toInsert[1]);
+    mu_assert("[test_insert] toInsert[2] was not inserted properly", 
+              (char *)list->get(list, list->length - 1) == toInsert[2]);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -281,6 +308,7 @@ static char *all_tests() {
     mu_run_test(test_copyNodeData);
     mu_run_test(test_pop);
     mu_run_test(test_popleft);
+    mu_run_test(test_insert);
 
     return 0;
 }
