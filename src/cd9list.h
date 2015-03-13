@@ -3,11 +3,27 @@
 
 #include "va_numargs.h"
 #include "macro_dispatcher.h"
+#include <stdbool.h>
 
 /**
  * @brief Use to express the fact that the size of a node is 0.
  */
 #define SIZE_ZERO 0
+
+/**
+ * @brief This is the signature of the callback you will pass to to 
+ *        `cd9list_find` in order to find an element. This function will be
+ *        called on every element in the list, so `data` will have by turn
+ *        the value of every element in the list.
+ * 
+ * @param data An element in the list.
+ * @param toFind The data you want to find.
+ * @param size The size of `data`.
+ *
+ * @return bool It returns `true` if the 2 values are equal and `false` 
+ *         otherwise.
+ */
+typedef bool (*CD9FindCallback)(void *data, void *toFind, size_t size);
 
 /*
  *  
@@ -99,11 +115,13 @@ typedef struct CD9List {
      *
      * @param self The current list.
      * @param data The data you are looking for.
+     * @param cmp The comparator function used to determine if the data you
+     *        are looking for is equal with a data in the list.
      *
      * @return size_t The index of the element you are looking for. If there is
      *         no match for your query it will return `-1`.
      */ 
-    size_t (*find)(void *self, void *data);
+    int (*find)(void *self, void *data, CD9FindCallback cmp);
 
     /**
      * @brief Use this function to remove the element at the index specified
@@ -206,6 +224,7 @@ typedef struct CD9List {
  * @return void It doesn't return enything.
  */
 typedef void (*CD9Callback)(void *item, size_t index, void *userData);
+
 
 /*
  * @brief Use this function to create a new node in a list.

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "minunit.h"
 #include "../src/cd9list.h"
 
@@ -322,6 +323,32 @@ static char *test_insert()
     return 0;
 }
 
+static bool test_find_cmp(void *data, void *toFind, size_t size)
+{
+    // In this case we can compare the addreses since the list stores the 
+    // addresses to the same thing. 
+    if(data == toFind) {
+        return true;
+    }
+
+    return false;
+}
+
+static char *test_find()
+{
+    const char *data[] = {"foo", "bar", "baz"};
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        list->append(list, (void *)data[i]);
+        mu_assert("[test_find] The index returned by find is wrong", 
+                  list->find(list, (void *)data[i], test_find_cmp) == i);
+    }
+
+    
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -338,6 +365,7 @@ static char *all_tests() {
     mu_run_test(test_insert);
     mu_run_test(test_foreach2);
     mu_run_test(test_foreach3);
+    mu_run_test(test_find);
 
     return 0;
 }

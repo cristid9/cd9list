@@ -177,19 +177,15 @@ int cd9list_remove(void *self, size_t index)
     return 1; // Removed successfully.
 }
 
-size_t cd9list_find(void *self, void *data)
+int cd9list_find(void *self, void *toFind, CD9FindCallback cmp)
 {
     CD9List *list = (CD9List *)self;
 
-    size_t i = 0;
-    for(CD9Node *node = list->nodes; node != NULL; node = node->next) {
-        if(node->data == data) {
-            return i;
+    CD9FOREACH_(list, node, index) {
+        if(cmp(node->data, toFind, node->size)) {
+            return index;
         }
-        i++;
     }
-
-
     return -1;
 }
 
