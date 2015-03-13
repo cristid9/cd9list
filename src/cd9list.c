@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cd9list.h"
+#include "callbacks.h"
 
 void cd9list_foreach(CD9List *list, CD9Callback func, void *userData) 
 {
@@ -201,6 +202,13 @@ int cd9list_find(void *self, void *toFind, CD9FindCallback cmp)
     return -1;
 }
 
+int cd9list_findByAddress(void *self, void *data) 
+{
+    CD9List *list = (CD9List *)self;
+
+    return list->find(list, data, callbacks_findByAddressCmp);
+}
+
 CD9List *cd9list_createList()
 {
     CD9List *list = malloc(sizeof(CD9List));
@@ -222,7 +230,8 @@ CD9List *cd9list_createList()
     list->pop            = cd9list_pop;
     list->popleft        = cd9list_popleft;
     list->appendCopy     = cd9list_appendCopy;
-    list->prependCopy   = cd9list_prependCopy;
+    list->prependCopy    = cd9list_prependCopy;
+    list->findByAddress  = cd9list_findByAddress;
 
     return list;
 }

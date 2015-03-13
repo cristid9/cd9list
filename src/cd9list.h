@@ -157,6 +157,18 @@ typedef struct CD9List {
     int (*find)(void *self, void *data, CD9FindCallback cmp);
 
     /**
+     * @brief This function is a wrapper over `cd9list_find`. It is intended
+     *        to ease the finding of elements in a list which stores addresses
+     *        not copies of the data.
+     *
+     * @param self The current list.
+     * @param data The data you want to find.
+     *
+     * @return int See the return type of \ref `cd9list_find`.
+     */ 
+    int (*findByAddress)(void *self, void *data);
+
+    /**
      * @brief Use this function to remove the element at the index specified
      *        as argument.
      *
