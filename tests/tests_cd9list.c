@@ -372,6 +372,29 @@ static char *test_appendCopy()
 
 }
 
+static char *test_prependCopy()
+{
+    const char *data[] = {"foo", "bar", "baz"};
+    const char *backup[] = {"foo", "bar", "baz"};
+
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        list->prependCopy(list, (void *)data[i], 4);
+    }
+
+    int i = 2;
+    CD9FOREACH(list, data) {
+        mu_assert("[test_prependCopy] The copies were not prepended properly", 
+                  !memcmp(data, backup[i], 4));
+        i--;
+    }
+
+    cd9list_deleteList(list);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -390,6 +413,7 @@ static char *all_tests() {
     mu_run_test(test_foreach3);
     mu_run_test(test_find);
     mu_run_test(test_appendCopy);
+    mu_run_test(test_prependCopy);
 
     return 0;
 }

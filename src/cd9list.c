@@ -94,6 +94,12 @@ void cd9list_prepend(void *self, void *data)
     list->_insertCopy(list, 0, data, SIZE_ZERO);
 }
 
+void cd9list_prependCopy(void *self, void *data, size_t size)
+{
+    CD9List *list = (CD9List *)self;
+    list->_insertCopy(list, 0, data, size);
+}
+
 void *cd9list_pop(void *self)
 {
     CD9List *list = (CD9List *)self;
@@ -216,6 +222,7 @@ CD9List *cd9list_createList()
     list->pop            = cd9list_pop;
     list->popleft        = cd9list_popleft;
     list->appendCopy     = cd9list_appendCopy;
+    list->prependCopy   = cd9list_prependCopy;
 
     return list;
 }

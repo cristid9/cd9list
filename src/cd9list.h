@@ -84,6 +84,18 @@ typedef struct CD9List {
     void (*prepend)(void *self, void *data);
 
     /**
+     * @brief This function is similar to \ref appendCopy, the only difference
+     *        is that it appends the copy at the beginning of the list.
+     *
+     * @param self The current list.
+     * @param data The data you want to prepend.
+     * @param size The size of the data you want to prepend.
+     *
+     * @return void It doesn't return anything.
+     */ 
+    void (*prependCopy)(void *self, void *data, size_t size);
+    
+    /**
      * @brief Call this function to get the data of the node stored at that 
      *        index.
      *
