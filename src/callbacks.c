@@ -12,3 +12,12 @@ bool callbacks_findByAddressCmp(void *value, void *toFind, size_t size)
 
     return false;
 }
+
+bool callbacks_findByValueCmp(void *value, void *toFind, size_t size)
+{
+    if(!memcmp(value, toFind, size)) {
+        return true;
+    }
+
+    return false;
+}

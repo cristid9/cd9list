@@ -1,6 +1,8 @@
 #ifndef CALLBACKS_H__
 #define CALLBACKS_H__
 
+#include <stdbool.h>
+
 /**
  * @brief This is an already implemented comparator for the function 
  *        `cd9list_find`. It is intended to be used as an internal comparator
@@ -8,5 +10,10 @@
  */
 bool callbacks_findByAddressCmp(void *value, void *toFind, size_t size);
 
+/**
+ * @brief An already implemented comparator intended to be used by
+ *        `cd9list_findByValue`. 
+ */ 
+bool callbacks_findByValueCmp(void *value, void *toFind, size_t size);
 
 #endif // CALLBACKS_H__

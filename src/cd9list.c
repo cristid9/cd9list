@@ -209,6 +209,13 @@ int cd9list_findByAddress(void *self, void *data)
     return list->find(list, data, callbacks_findByAddressCmp);
 }
 
+int cd9list_findByValue(void *self, void *data)
+{
+    CD9List *list = (CD9List *)self;
+
+    return list->find(list, data, callbacks_findByValueCmp);
+}
+
 CD9List *cd9list_createList()
 {
     CD9List *list = malloc(sizeof(CD9List));
@@ -232,6 +239,7 @@ CD9List *cd9list_createList()
     list->appendCopy     = cd9list_appendCopy;
     list->prependCopy    = cd9list_prependCopy;
     list->findByAddress  = cd9list_findByAddress;
+    list->findByValue    = cd9list_findByValue;
 
     return list;
 }

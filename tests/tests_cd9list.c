@@ -412,6 +412,24 @@ static char *test_findByAddress()
     return 0;
 }
 
+static char *test_findByValue()
+{
+    const char *data[] = {"foo", "bar", "baz"};
+    const char *backup[] = {"foo", "bar", "baz"};
+    
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        list->appendCopy(list, (void *)data[i], 4);
+        mu_assert("[test_findByValue] The index is wrong", 
+                  list->findByValue(list, (void *)backup[i]) == i);
+    }
+
+    cd9list_deleteList(list);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -432,6 +450,7 @@ static char *all_tests() {
     mu_run_test(test_appendCopy);
     mu_run_test(test_prependCopy);
     mu_run_test(test_findByAddress);
+    mu_run_test(test_findByValue);
 
     return 0;
 }

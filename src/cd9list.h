@@ -169,6 +169,18 @@ typedef struct CD9List {
     int (*findByAddress)(void *self, void *data);
 
     /**
+     * @brief Wrapper for `cd9list_find`. It is intended to make your life 
+     *        easier if you need to find values in a list that stores copies,
+     *        and by "copies" I mean pointers to copies.
+     *
+     * @param self The current list.
+     * @param data The data you want to find.
+     *
+     * @return int See the return value for \ref `cd9list_find`.
+     */ 
+    int (*findByValue)(void *self, void *data);
+
+    /**
      * @brief Use this function to remove the element at the index specified
      *        as argument.
      *
