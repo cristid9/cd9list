@@ -345,8 +345,31 @@ static char *test_find()
                   list->find(list, (void *)data[i], test_find_cmp) == i);
     }
 
+    cd9list_deleteList(list);
     
     return 0;
+}
+
+static char *test_appendCopy()
+{
+    const char *data[] = {"foo", "bar", "baz"};
+    const char *backup[] = {"foo", "bar", "baz"};
+
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        list->appendCopy(list, (void *)data[i], 4);
+    }
+
+    CD9FOREACH(list, value, index) {
+        mu_assert("[test_appendCopy] The copies were not appended properly", 
+                  !memcmp(value, backup[index], 4));
+    }
+
+    cd9list_deleteList(list);
+
+    return 0;
+
 }
 
 static char *all_tests() {
@@ -366,6 +389,7 @@ static char *all_tests() {
     mu_run_test(test_foreach2);
     mu_run_test(test_foreach3);
     mu_run_test(test_find);
+    mu_run_test(test_appendCopy);
 
     return 0;
 }

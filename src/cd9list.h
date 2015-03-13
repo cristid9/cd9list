@@ -52,6 +52,27 @@ typedef struct CD9List {
     void (*append)(void *self, void *data);
 
     /**
+     * @brief Use this function when you want to append a copy of the data
+     *        not just keeping a reference to it in the list. You will want to
+     *        do this when the lifetime of the list will be longer than the
+     *        lifetime of the data you want to append. For example, you want
+     *        to append some values created in a function to a list. After the
+     *        function returns, these values won't be available anymore, so the
+     *        list will have a broken reference. Using this function you can
+     *        avoid this kind of scenarios. This is a wrapped over 
+     *        `cd9list_insertCopy`.
+     *
+     * @param self The current list.
+     * @param data The data you want to append.
+     * @param size The size of the data you want to append. This is necessary
+     *        because we need to know how large should be the block of memory
+     *        allocated for the copy. 
+     *
+     * @return void It doesn't return anything.
+     */
+    void (*appendCopy)(void *self, void *data, size_t size);
+
+    /**
      * @brief Call this function whenever you want to add a new node at the 
      *        beggining of the list.
      *
