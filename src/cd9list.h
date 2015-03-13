@@ -210,6 +210,18 @@ typedef struct CD9List {
      * @return void It doesn't return anything.
      */ 
     void (*_insertCopy)(void *self, size_t index, void *value, size_t size);
+
+    /**
+     * @brief Use this function to get a copy of the current function. Be 
+     *        aware that it will allocate a new block of memory and will copy
+     *        the contents of the current list, so you will really get a copy
+     *        of the current list.
+     *
+     * @param self The current list.
+     *
+     * @return CD9List * A pointer to the copy.       
+     */ 
+    struct CD9List *(*copy)(void *self);
 } CD9List;
 
 

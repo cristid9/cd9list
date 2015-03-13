@@ -430,6 +430,47 @@ static char *test_findByValue()
     return 0;
 }
 
+static char *test_copy()
+{
+    const char *data[] = {"foo", "bar", "baz"};
+
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        list->append(list, (void *)data[i]);
+    }
+
+    CD9List *copyList = list->copy(list);
+
+    // Test the version that stores references.
+    for(int i = 0; i < 3; i++) {
+        mu_assert("[test_copy] The pointers are not equal",
+                  copyList->get(copyList, i) == list->get(list, i));
+    }
+
+    cd9list_deleteList(list);
+    cd9list_deleteList(copyList);
+    
+    // Now test the version that stores values.
+    list = cd9list_createList();
+    
+    for(int i = 0; i < 3; i++) {
+        list->appendCopy(list, (void *)data, 4);
+    }
+
+    copyList = list->copy(list);
+
+    for(int i = 0; i < 3; i++) {
+        mu_assert("[test_copy] The values were not stored properly",
+                  !memcmp(list->get(list, i), copyList->get(copyList, i), 4));
+    }
+
+    cd9list_deleteList(list);
+    cd9list_deleteList(copyList);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -451,6 +492,7 @@ static char *all_tests() {
     mu_run_test(test_prependCopy);
     mu_run_test(test_findByAddress);
     mu_run_test(test_findByValue);
+    mu_run_test(test_copy);
 
     return 0;
 }
