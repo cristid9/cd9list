@@ -222,6 +222,11 @@ typedef struct CD9List {
      * @return CD9List * A pointer to the copy.       
      */ 
     struct CD9List *(*copy)(void *self);
+
+    /**
+     *
+     */ 
+    struct CD9List *(slice)(void *self, size_t start, size_t stop, size_t step);
 } CD9List;
 
 
@@ -369,6 +374,18 @@ CD9Node *cd9list_getNode(CD9List *list, size_t index);
  * @brief CD9Node * A of the `node`'s data.
  */ 
 void *cd9list_copyNodeData(CD9Node *node);
+
+/**
+ * @brief Use this function to concatenate 2 lists. It returns a pointer to
+ *        the list that represents the concatenated version of the `list1`
+ *        and `list2`.
+ *
+ * @param list1 The first list.
+ * @param list2 The second list.
+ *
+ * @return CD9List * Pointer to the concatenated version of the 2 lists.
+ */ 
+CD9List *cd9list_concat(CD9List *list1, CD9List *list2);
 
 /**
  * @brief Use this function to iterate over all the elements in the list.

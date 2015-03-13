@@ -471,6 +471,40 @@ static char *test_copy()
     return 0;
 }
 
+static char *test_concat()
+{
+    const char *data1[] = {"foo", "bar", "baz"};
+    const char *data2[] = {"bax", "bay", "bad"};
+    
+    CD9List *list1 = cd9list_createList();
+    for(int i = 0; i < 3; i++) {
+        list1->append(list1, (void *)data1[i]);
+    }
+
+    CD9List *list2 = cd9list_createList();
+    for(int i = 0; i < 3; i++) {
+        list2->append(list2, (void *)data2[i]);
+    }
+
+    CD9List *result = cd9list_concat(list1, list2);
+
+    for(int i = 0; i < 3; i++) {
+        mu_assert("[test_concat] First half is not equal to list1",
+                  result->get(result, i) == list1->get(list1, i));
+    }
+
+    for(int i = 3, j = 0; i < 6; i++, j++) {
+        mu_assert("[test_concat] Second half is not equal to list2",
+                  result->get(result, i) == list2->get(list2, j));
+    }
+
+    cd9list_deleteList(list1);
+    cd9list_deleteList(list2);
+    cd9list_deleteList(result);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -493,6 +527,7 @@ static char *all_tests() {
     mu_run_test(test_findByAddress);
     mu_run_test(test_findByValue);
     mu_run_test(test_copy);
+    mu_run_test(test_concat);
 
     return 0;
 }

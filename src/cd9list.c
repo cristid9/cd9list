@@ -48,6 +48,17 @@ CD9Node *cd9list_getNode(CD9List *list, size_t index)
     return NULL;
 }
 
+CD9List *cd9list_concat(CD9List *list1, CD9List *list2)
+{
+    CD9List *result   = list1->copy(list1);
+
+    CD9FOREACH_(list2, node) {
+        result->appendCopy(result, node->data, node->size);        
+    }
+
+    return result;
+}
+
 void *cd9list_copyNodeData(CD9Node *node)
 {
     // The user was careless, he shouldn't call this function on an empty
@@ -175,6 +186,19 @@ CD9List *cd9list_copy(void *self)
     return secondList;
 }
 
+CD9List *cd9list_slice(void *self, size_t start, size_t stop, size_t step)
+{
+    CD9List *list   = (CD9List *)self;
+    CD9List *result = cd9list_createList();
+
+    for(size_t i = start; i < stop; i += step) {
+        CD9Node *node = cd9list_getNode(list, i);
+        result->appendCopy(result, node->data, node->size);
+    }
+
+    return result;
+}
+
 int cd9list_remove(void *self, size_t index)
 {
     CD9List *list = (CD9List *)self;
@@ -253,6 +277,7 @@ CD9List *cd9list_createList()
     list->findByAddress  = cd9list_findByAddress;
     list->findByValue    = cd9list_findByValue;
     list->copy           = cd9list_copy;
+    list->slice          = cd9list_slice;
 
     return list;
 }
