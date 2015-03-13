@@ -220,20 +220,6 @@ CD9List *cd9list_createList()
     return list;
 }
 
-void cd9list_deleteList(CD9List *list)
-{
-    CD9Node *phead = list->nodes;
-    CD9Node *tmp;
-
-    while(phead != NULL) {
-        tmp = phead->next;
-        free(phead);
-        phead = tmp;
-    }
-
-    free(list);
-}
-
 void cd9list_deleteNode(CD9Node *node)
 {
     if(node->size != SIZE_ZERO) {
@@ -243,3 +229,18 @@ void cd9list_deleteNode(CD9Node *node)
 
     free(node);
 }
+
+void cd9list_deleteList(CD9List *list)
+{
+    CD9Node *phead = list->nodes;
+    CD9Node *tmp;
+
+    while(phead != NULL) {
+        tmp = phead->next;
+        cd9list_deleteNode(phead);
+        phead = tmp;
+    }
+
+    free(list);
+}
+
