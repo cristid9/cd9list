@@ -540,6 +540,15 @@ static char *test_slice()
     }
 
     cd9list_deleteList(lastTwo);
+    
+    CD9List *twoByTwo = list->slice(list, 0, 0, 2);
+    
+    for(int i = 0, j = 0; i < 4; i += 2, j++) {
+        mu_assert("[test_slice] The two by two slice is wrong",
+                  list->get(list, i) == twoByTwo->get(twoByTwo, j));
+    }
+
+    cd9list_deleteList(twoByTwo);
     cd9list_deleteList(list);
 
     return 0;
