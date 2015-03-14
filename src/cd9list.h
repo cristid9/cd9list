@@ -224,9 +224,25 @@ typedef struct CD9List {
     struct CD9List *(*copy)(void *self);
 
     /**
+     * @brief Use this function to receive a slice of the current list. The
+     *        "slice" is a pointer to a a newly allocated block of memory which
+     *        contains a portion of the current list.
+     * 
+     * @param self The current list.
+     * @param start The index where the slicing should start. If it is 
+     *        negative it is the equivalent of the length of the list + start.
+     *        For example, in the list: [1, 2, 3, 4], -2 is the index of 3,
+     *        because the length of the list is 4 and 4 + (-2) = 2, which is
+     *        the index of the element 3.
+     * @param stop The index of the element where the slicing should stop.
+     *        The same rules of negative indexes apply as above. Note that if
+     *        you want to have the last element in your slice `stop` should be
+     *        equal to `0`. A `0` stop means to slice until the end(inclusiv).
+     * @param step The range between elements in the slice.
      *
+     * @return CD9List * A pointer to the slice.
      */ 
-    struct CD9List *(slice)(void *self, size_t start, size_t stop, size_t step);
+    struct CD9List *(*slice)(void *self, int start, int stop, size_t step);
 } CD9List;
 
 

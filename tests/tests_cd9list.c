@@ -505,6 +505,46 @@ static char *test_concat()
     return 0;
 }
 
+static char *test_slice()
+{
+    const char *data[] = {"foo", "bar", "baz", "biz"};
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 4; i++) {
+        list->append(list, (void *)data[i]);
+    }
+
+    CD9List *firstTwo = list->slice(list, 0, 2, 1);
+
+    for(int i = 0; i < 2; i++) {
+        mu_assert("[test_slice] Frist slice was generated wrong", 
+                  firstTwo->get(firstTwo, 0) == list->get(list, 0));
+    }
+
+    cd9list_deleteList(firstTwo);
+
+    CD9List *middle = list->slice(list, 1, -1, 1);
+
+    for(int i = 1, j = 0; i < 3; i++, j++) {
+        mu_assert("[test_slice] The middle slice is generated wrong", 
+                  list->get(list, i) == middle->get(middle, j));
+    }
+
+    cd9list_deleteList(middle);
+
+    CD9List *lastTwo = list->slice(list, -2, 0, 1);
+
+    for(int i = 2, j = 0; i < 4; i++, j++) {
+        mu_assert("[test_slice] The last slice is wrong",
+                  lastTwo->get(lastTwo, j) == list->get(list, i));
+    }
+
+    cd9list_deleteList(lastTwo);
+    cd9list_deleteList(list);
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -528,6 +568,7 @@ static char *all_tests() {
     mu_run_test(test_findByValue);
     mu_run_test(test_copy);
     mu_run_test(test_concat);
+    mu_run_test(test_slice);
 
     return 0;
 }

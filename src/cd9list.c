@@ -186,10 +186,24 @@ CD9List *cd9list_copy(void *self)
     return secondList;
 }
 
-CD9List *cd9list_slice(void *self, size_t start, size_t stop, size_t step)
+CD9List *cd9list_slice(void *self, int start, int stop, size_t step)
 {
     CD9List *list   = (CD9List *)self;
     CD9List *result = cd9list_createList();
+
+    if(start < 0) {
+        // Since start is negatice, adding it is equivalent to the substraction
+        // of the absolute value of start.
+        start = list->length + start;
+    }
+
+    if(stop < 0) {
+        stop = list->length + stop;
+    }
+
+    if(stop == 0) {
+        stop = list->length;
+    }
 
     for(size_t i = start; i < stop; i += step) {
         CD9Node *node = cd9list_getNode(list, i);
