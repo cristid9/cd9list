@@ -148,6 +148,26 @@ void *cd9list_popleft(void *self)
     return tmp;
 }
 
+void cd9list_reverse(void *self)
+{
+    CD9List *list = (CD9List *)self;
+
+    CD9Node *start = list->nodes->next;
+    CD9Node *prev  = list->nodes;
+    CD9Node *tmp;
+
+    prev->next = NULL;
+
+    while(start != NULL) {
+        tmp = start->next;
+        start->next = prev;
+        prev = start;
+        start = tmp;
+    }
+
+    list->nodes = prev;
+}
+
 void cd9list_insertCopy(void *self, size_t index, void *data, size_t size)
 {
     CD9List *list = (CD9List *)self;
@@ -292,6 +312,7 @@ CD9List *cd9list_createList()
     list->findByValue    = cd9list_findByValue;
     list->copy           = cd9list_copy;
     list->slice          = cd9list_slice;
+    list->reverse        = cd9list_reverse;
 
     return list;
 }

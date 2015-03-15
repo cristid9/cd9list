@@ -554,6 +554,26 @@ static char *test_slice()
     return 0;
 }
 
+static char *test_reverse()
+{
+    const char *data[] = {"foo", "bar", "baz", "biz"};
+    CD9List *list = cd9list_createList();
+
+    for(int i = 0; i < 4; i++) {
+        list->append(list, (void *)data[i]);
+    }
+
+    CD9List *reversed = list->copy(list);
+    reversed->reverse(reversed);
+
+    for(int i = 3, j = 0; i >= 0; i--, j++) {
+        mu_assert("[test_reverse] The list was not reversed properly", 
+                  list->get(list, i) == reversed->get(reversed, j));
+    }
+
+    return 0;
+}
+
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -578,6 +598,7 @@ static char *all_tests() {
     mu_run_test(test_copy);
     mu_run_test(test_concat);
     mu_run_test(test_slice);
+    mu_run_test(test_reverse);
 
     return 0;
 }

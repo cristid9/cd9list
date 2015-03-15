@@ -212,6 +212,15 @@ typedef struct CD9List {
     void (*_insertCopy)(void *self, size_t index, void *value, size_t size);
 
     /**
+     * @brief Use this function to reverse the current list.
+     *
+     * @param self The current list.
+     *
+     * @return void It doesn't return anything.
+     */ 
+    void (*reverse)(void *self);
+
+    /**
      * @brief Use this function to get a copy of the current function. Be 
      *        aware that it will allocate a new block of memory and will copy
      *        the contents of the current list, so you will really get a copy
