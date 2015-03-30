@@ -286,6 +286,121 @@ int cd9list_findByValue(void *self, void *data)
     return list->find(list, data, callbacks_findByValueCmp);
 }
 
+/**
+ * @brief Helper function used by `cd9list_mergeSort` in order to combine 2
+ *        sublists.
+ *
+ * @param part1 Pointer to the first sublist.
+ * @param part2 Pointer to the second sublist.
+ * @param cmp The comparison function, see \ref CD9List::sort for more details. 
+ *
+ * @return CD9Node * A pointer to the merged version of the 2 parts.
+ */
+CD9Node *cd9list_merge(CD9Node *part1, 
+                       CD9Node *part2, 
+                       int (*cmp)(const void *, const void *))
+{
+    CD9Node *temp;
+
+    if(cmp(part1->data, part2->data) <= 0) {
+        temp  = part1;
+        part1 = part1->next; 
+    }
+    else {
+        temp  = part2;
+        part2 = part2->next;
+    }
+
+    CD9Node *current = temp;
+
+    while(part1 != NULL && part2 != NULL) {
+        if(cmp(part1->data, part2->data) <= 0) {
+            current->next = part1;
+            part1         = part1->next; 
+        }
+        else {
+            current->next = part2;
+            part2         = part2->next;
+        }
+        current = current->next;
+    }
+
+    if(part1 != NULL) {
+        current->next = part1;
+    }
+
+    if(part2 != NULL) {
+        current->next = part2;
+    }
+
+    return temp;
+}  
+
+/**
+ * @brief This is a helper function, its main purpose is to return a pointer
+ *        to the node of the list refered by `start` and `stop`. We can't use
+ *        `cd9list_getNode` since it requires a pointer to the list and we 
+ *        don't have access to it inside `cd9list_mergeSort`.
+ * 
+ * @param start The starting node of the list.
+ * @param stop Pointer to the end of the list.
+ *
+ * @return CD9Node * A pointer to the middle node of the list delimited by
+ *         `start` and `stop`.
+ */ 
+CD9Node *cd9list_getMidNode(CD9Node *start, CD9Node *stop)
+{
+    CD9Node *front = start;
+    CD9Node *back  = start->next;
+
+    while(back != stop) {
+        back = back->next;
+        if(back != stop) {
+            back  = back->next;
+            front = front->next;
+        }
+    }
+
+    return front;
+}
+
+/**
+ * @brief This is the function called by `cd9list_sort` in order to sort a 
+ *        list. It implements the merge sort algorithm.
+ * 
+ * @param start A pointer to the starting node of the list that should be
+ *        sorted.
+ * @param stop A pointer to the stoping node of the list.
+ * @param cmp The comparison function. See \ref CD9List::sort for more details.
+ *
+ * @return CD9Node * It returns a pointer to the sorted version of the list.
+ */ 
+CD9Node *cd9list_mergeSort(CD9Node *start,
+                           CD9Node *stop,
+                           int (*cmp)(const void *, const void *))
+{
+    if(start == stop) {
+        start->next = NULL;
+        return start;
+    }
+
+    CD9Node *midNode     = cd9list_getMidNode(start, stop->next);
+    CD9Node *midNodeNext = midNode->next;
+    
+    CD9Node *part1 = cd9list_mergeSort(start, midNode, cmp);
+    CD9Node *part2 = cd9list_mergeSort(midNodeNext, stop, cmp);
+
+    return cd9list_merge(part1, part2, cmp);
+}    
+
+void cd9list_sort(void *self, int (*cmp)(const void *, const void *))
+{
+    CD9List *list = (CD9List *)self;
+    CD9Node *stop = cd9list_getNode(list, list->length - 1);
+
+    list->nodes   = cd9list_mergeSort(list->nodes, stop, cmp); 
+}
+
 CD9List *cd9list_createList()
 {
     CD9List *list = malloc(sizeof(CD9List));
@@ -313,6 +428,7 @@ CD9List *cd9list_createList()
     list->copy           = cd9list_copy;
     list->slice          = cd9list_slice;
     list->reverse        = cd9list_reverse;
+    list->sort           = cd9list_sort;
 
     return list;
 }

@@ -574,6 +574,53 @@ static char *test_reverse()
     return 0;
 }
 
+static int test_sort_int_cmp(const void *a, const void *b)
+{
+    return *(int *)a - *(int *)b;
+}
+
+static int test_sort_string_cmp(const void *a, const void *b)
+{
+    return strcmp((char *)a, (char *)b);
+}
+
+static char *test_sort()
+{
+    const int firstSet[]          = {4, 3, 2, 1, 5, 6};
+    const int expectedResult[]    = {1, 2, 3, 4, 5, 6};
+
+    const char *secondSet[]       = {"d", "a", "b", "c"};
+    const char *expectedResult2[] = {"a", "b", "c", "d"};
+
+    CD9List *firstList = cd9list_createList();
+    for(int i = 0; i < 6; i++) {
+        firstList->append(firstList, (void *)&firstSet[i]);
+    }
+
+    firstList->sort(firstList, test_sort_int_cmp);
+    CD9FOREACH(firstList, val, index) {
+        mu_assert("[test_sort] Items are not sorted properly in first set",
+                  *(int *)val == expectedResult[index]);
+    }
+
+    cd9list_deleteList(firstList);
+
+    CD9List *secondList = cd9list_createList();
+    for(int i = 0; i < 4; i++) {
+        secondList->append(secondList, (void *)secondSet[i]);
+    } 
+    {
+        secondList->sort(secondList, test_sort_string_cmp);
+        CD9FOREACH(secondList, val, index) {
+            mu_assert("[test_sort] The string list was not sorted properly",
+                      (char *)val == expectedResult2[index]);
+        }
+    }
+
+    cd9list_deleteList(secondList);
+
+    return 0;
+}
 static char *all_tests() {
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
@@ -599,6 +646,7 @@ static char *all_tests() {
     mu_run_test(test_concat);
     mu_run_test(test_slice);
     mu_run_test(test_reverse);
+    mu_run_test(test_sort);
 
     return 0;
 }

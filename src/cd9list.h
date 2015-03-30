@@ -252,6 +252,18 @@ typedef struct CD9List {
      * @return CD9List * A pointer to the slice.
      */ 
     struct CD9List *(*slice)(void *self, int start, int stop, size_t step);
+
+    /**
+     * @brief Use this function to sort a list.
+     *
+     * @param self The current list.
+     * @param cmp The comparator function `cmp` should returna value less than
+     *        `0` if `a` is less than `b`, `0` if they are equal. Or a value
+     *        bigger than `1` if `a` is bigger than `b`.
+     * 
+     * @return void It doesn't return anything.        
+     */ 
+    void (*sort)(void *self, int (*cmp)(const void *a, const void *b));
 } CD9List;
 
 
