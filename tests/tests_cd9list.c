@@ -17,6 +17,8 @@ static char *test_createNode()
         (char *)node->data == data );
     mu_assert("Next node is not NULL", node->next == NULL);
 
+    cd9list_deleteNode(node);
+
     return 0;
 }
 
@@ -27,6 +29,8 @@ static char *test_createList()
     mu_assert("List is empty", list != NULL);
     mu_assert("Default length is not 0", list->length == 0);
     mu_assert("List nodes are not null", list->nodes == NULL);
+
+    cd9list_deleteList(list);
 
     return 0;
 }
@@ -50,6 +54,9 @@ static char *test_getNode()
     CD9Node *queryNode = cd9list_getNode(list, 0);
 
     mu_assert("[test_getNode]", node->data == queryNode->data);
+
+    cd9list_deleteNode(node);
+    cd9list_deleteList(list);
 
     return 0;
 }
@@ -128,6 +135,8 @@ static char *test_prepend()
     mu_assert("[test_prepend] Element was not prepended properly", 
               node->data == (char *)first);
 
+    cd9list_deleteList(list);
+
     return 0;
 }
 
@@ -151,6 +160,8 @@ static char *test_get()
 
     mu_assert("The index doesn't point to the right data",
         (char *)list->get(list, 2) == dataAtIndex2);
+
+    cd9list_deleteList(list);
 
     return 0;
 }
@@ -285,13 +296,16 @@ static char *test_pop()
 
     mu_assert("[test_pop] The size of the list was not set properly", 
               list->length == 0);
-
+    cd9list_deleteList(list);
+    
     mu_assert("[test_pop] The copy and the string foo are not equal", 
               !strcmp(ptrToCopy, data));
 
     mu_assert("[test_pop] Pop returned a pointer to the wrong thing", 
               (char *)ptrToData == data);
-    
+   
+    free(ptrToCopy);
+
     return 0;
 }
 
@@ -309,10 +323,16 @@ static char *test_popleft()
 
     mu_assert("[test_popleft] The size of the list was not set properly", 
               list->length == 0);
+    
+    cd9list_deleteList(list);
+    
     mu_assert("[test_popleft] Popleft returned a pointer to the wrong thing", 
+
               (char *)ptrToData == data);
     mu_assert("[test_popleft] The copy and the string foo are not equal", 
               !strcmp(ptrToCopy, data));
+
+    free(ptrToCopy);
 
     return 0;
 }
@@ -340,6 +360,8 @@ static char *test_insert()
               (char *)list->get(list, 2) == toInsert[1]);
     mu_assert("[test_insert] toInsert[2] was not inserted properly", 
               (char *)list->get(list, list->length - 1) == toInsert[2]);
+
+    cd9list_deleteList(list);
 
     return 0;
 }
@@ -586,12 +608,15 @@ static char *test_reverse()
 
     CD9List *reversed = list->copy(list);
     reversed->reverse(reversed);
-
+    
     for(int i = 3, j = 0; i >= 0; i--, j++) {
         mu_assert("[test_reverse] The list was not reversed properly", 
                   list->get(list, i) == reversed->get(reversed, j));
     }
 
+    cd9list_deleteList(reversed);
+    cd9list_deleteList(list);
+    
     return 0;
 }
 
