@@ -169,7 +169,19 @@ static char *test_foreach2()
                   (char *)value == data[i]); 
         i++;
     }
-   
+  
+    // We will run the previus code again just to see if multple for loops
+    // can be run in the same scope, without changing the name of the loop's
+    // variables.
+
+    i = 0;
+    CD9FOREACH(list, value) {
+        mu_assert("[test_foreach2] The data provided is not correct in thei"
+                  "second loop in the same scope", 
+                  (char *)value == data[i]); 
+        i++;
+    }
+
     cd9list_deleteList(list);
 
     return 0;
@@ -184,6 +196,15 @@ static char *test_foreach3()
     for(int i = 0; i < 3; i++) {
         list->append(list, (void *)data[i]);
     }
+
+    CD9FOREACH(list, value, i) {
+        mu_assert("[test_foreach3] The data provided is not correct", 
+                  (char *)value == data[i]);
+    }
+
+    // We will run the piece of code from the above again in order to see
+    // if there are any problems when there are 2 loops in the same scope.
+
 
     CD9FOREACH(list, value, i) {
         mu_assert("[test_foreach3] The data provided is not correct", 
@@ -608,7 +629,9 @@ static char *test_sort()
     CD9List *secondList = cd9list_createList();
     for(int i = 0; i < 4; i++) {
         secondList->append(secondList, (void *)secondSet[i]);
-    } 
+    }
+    // This is because I can't use multiple CD9FOREACH loops in the same 
+    // functions. 
     {
         secondList->sort(secondList, test_sort_string_cmp);
         CD9FOREACH(secondList, val, index) {

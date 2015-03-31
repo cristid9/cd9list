@@ -279,11 +279,10 @@ typedef struct CD9List {
  *        is not intended to be used by the end user, since it exposes to 
  *        many internal things.
  */ 
-#define CD9FOREACH_3(list, node, index) CD9Node *node;\
-                                       size_t index; \
-                                       for(node = list->nodes, index = 0; \
-                                           node != NULL; node = \
-                                           node->next, index++)
+#define CD9FOREACH_3(list, node, index) \
+    for(size_t index = 0, stopF1 = 1; stopF1 != 0; stopF1 = 0 ) \
+        for(CD9Node *node = list->nodes; node != NULL; \
+            node = node->next, index++)
 /**
  * @brief This version of foreach shouldn't be used by the library user 
  *        because it exposes him to some of the library internals, such as the
@@ -298,24 +297,28 @@ typedef struct CD9List {
  *        `value` will a get a `void *` pointer to the each value in the list
  *        per iteration.
  */
-#define CD9FOREACH2(list, value) CD9Node *node = list->nodes; \
-                                for(void *value = node->data; node != NULL; \
-                                    value = ((node->next != NULL) ? \
-                                             node->next->data : NULL), \
-                                    node = node->next)
+#define CD9FOREACH2(list, value) \
+    for(CD9Node *node = list->nodes, *stopF1 = list->nodes; stopF1 != NULL;\
+        stopF1 = NULL) \
+        for(void *value = node->data; node != NULL; \
+            value = ((node->next != NULL) ? \
+                     node->next->data : NULL), \
+            node = node->next)
 
 /**
  * @brief It acts similar to \ref CD9FOREACH2, the only difference is that you
  *        will also get the indes of the `value`;
  */ 
-#define CD9FOREACH3(list, value, index) CD9Node *node = list->nodes; \
-                                       size_t index = 0; \
-                                       for(void *value = node->data; \
-                                           node != NULL; \
-                                           value = ((node->next != NULL) ? \
-                                                    node->next->data : NULL), \
-                                           node = node->next, \
-                                           index++)
+#define CD9FOREACH3(list, value, index) \
+    for(CD9Node *node = list->nodes, *stopF1 = list->nodes; stopF1 != NULL; \
+        stopF1 = NULL) \
+        for(size_t index = 0, stopF2 = 1; stopF2 != 0; stopF2 = 0) \
+            for(void *value = node->data; \
+                node != NULL; \
+                value = ((node->next != NULL) ? \
+                         node->next->data : NULL), \
+                node = node->next, \
+                index++)
 /**
  * @brief This version of foreach is intended to be used byt the user because
  *        it passes the data, not the node to it, so it hides some of the
