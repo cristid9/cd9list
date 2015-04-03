@@ -10,12 +10,12 @@ int tests_run = 0;
 static char *test_createNode() 
 {
     const char *data = "foo";
-    CD9Node *node = cd9list_createNode(data, SIZE_ZERO);
+    CD9Node *node    = cd9list_createNode(data, SIZE_ZERO);
 
-    mu_assert("Error allocating the list", node != NULL);
-    mu_assert("Data is not stored properly in a node", 
+    mu_assert("[test_createNode] Error allocating the list", node != NULL);
+    mu_assert("[test_createNode] Data is not stored properly in a node", 
         (char *)node->data == data );
-    mu_assert("Next node is not NULL", node->next == NULL);
+    mu_assert("[test_createNode] Next node is not NULL", node->next == NULL);
 
     cd9list_deleteNode(node);
 
@@ -26,9 +26,10 @@ static char *test_createList()
 {
     CD9List *list = cd9list_createList();
 
-    mu_assert("List is empty", list != NULL);
-    mu_assert("Default length is not 0", list->length == 0);
-    mu_assert("List nodes are not null", list->nodes == NULL);
+    mu_assert("[test_createList] List is empty", list != NULL);
+    mu_assert("[test_createList] Default length is not 0", list->length == 0);
+    mu_assert("[test_createList] List nodes are not null", 
+              list->nodes == NULL);
 
     cd9list_deleteList(list);
 
@@ -53,7 +54,8 @@ static char *test_getNode()
 
     CD9Node *queryNode = cd9list_getNode(list, 0);
 
-    mu_assert("[test_getNode]", node->data == queryNode->data);
+    mu_assert("[test_getNode] Node data is wrong", 
+              node->data == queryNode->data);
 
     cd9list_deleteNode(node);
     cd9list_deleteList(list);
@@ -64,8 +66,7 @@ static char *test_getNode()
 static char *test_insertCopy()
 {
     char *backup[] = {"foo", "bar", "baz"};
-    
-    char *data[] = {"foo", "bar", "baz"};
+    char *data[]   = {"foo", "bar", "baz"};
     
     CD9List *list = cd9list_createList();
 
@@ -93,8 +94,7 @@ static char *test_insertCopy()
 static char *test_append()
 {
     const char *data[] = {"foo", "bar", "baz"};
-
-    CD9List *list = cd9list_createList();    
+    CD9List *list      = cd9list_createList();    
 
     for(int i = 0; i < 3; i++) {
         list->append(list, data[i]);
@@ -151,13 +151,13 @@ static char *test_get()
     list->append(list, dataAtIndex1);
     list->append(list, dataAtIndex2);
 
-    mu_assert("The index doesn't point to the right data",
+    mu_assert("[test_get] The index doesn't point to the right data",
         (char *)list->get(list, 0) == dataAtIndex0);
     
-    mu_assert("The index doesn't point to the right data",
+    mu_assert("[test_get] The index doesn't point to the right data",
         (char *)list->get(list, 1) == dataAtIndex1);
 
-    mu_assert("The index doesn't point to the right data",
+    mu_assert("[test_get] The index doesn't point to the right data",
         (char *)list->get(list, 2) == dataAtIndex2);
 
     cd9list_deleteList(list);
@@ -168,11 +168,12 @@ static char *test_get()
 static char *test_foreach2()
 {
     const char *data[] = {"foo", "bar", "baz"};
-    CD9List *list = cd9list_createList();
+    CD9List *list      = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
         list->append(list, data[i]);
     }
+
     size_t i = 0;
     CD9FOREACH(list, value) {
         mu_assert("[test_foreach2] The data provided is not correct", 
@@ -201,7 +202,7 @@ static char *test_foreach2()
 static char *test_foreach3()
 {
     const char *data[] = {"foo", "bar", "baz"};
-    CD9List *list = cd9list_createList();
+    CD9List *list      = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
         list->append(list, data[i]);
@@ -267,9 +268,8 @@ static char *test_remove()
 static char *test_copyNodeData()
 {
     const char *data = "foo";
-
-    CD9Node *node = cd9list_createNode(data, 4);
-    void *copy = cd9list_copyNodeData(node);
+    CD9Node *node    = cd9list_createNode(data, 4);
+    void *copy       = cd9list_copyNodeData(node);
 
     cd9list_deleteNode(node);
 
@@ -311,8 +311,7 @@ static char *test_pop()
 static char *test_popleft()
 {
     const char *data = "foo";
-
-    CD9List *list = cd9list_createList();
+    CD9List *list    = cd9list_createList();
 
     list->append(list, data);
     list->_insertCopy(list, list->length, data, 4);
@@ -338,7 +337,7 @@ static char *test_popleft()
 
 static char *test_insert()
 {
-    const char *toInsert[] = {"head", "middle", "end"};
+    const char *toInsert[]    = {"head", "middle", "end"};
     const char *initialData[] = {"foo", "bar", "baz"};
 
     CD9List *list = cd9list_createList();
@@ -379,7 +378,7 @@ static bool test_find_cmp(const void *data, const void *toFind, size_t size)
 static char *test_find()
 {
     const char *data[] = {"foo", "bar", "baz"};
-    CD9List *list = cd9list_createList();
+    CD9List *list      = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
         list->append(list, data[i]);
@@ -475,8 +474,7 @@ static char *test_findByValue()
 static char *test_copy()
 {
     const char *data[] = {"foo", "bar", "baz"};
-
-    CD9List *list = cd9list_createList();
+    CD9List *list      = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
         list->append(list, data[i]);
@@ -599,7 +597,7 @@ static char *test_slice()
 static char *test_reverse()
 {
     const char *data[] = {"foo", "bar", "baz", "biz"};
-    CD9List *list = cd9list_createList();
+    CD9List *list      = cd9list_createList();
 
     for(int i = 0; i < 4; i++) {
         list->append(list, data[i]);
@@ -656,18 +654,19 @@ static char *test_sort()
     }
     // This is because I can't use multiple CD9FOREACH loops in the same 
     // functions. 
-    {
-        secondList->sort(secondList, test_sort_string_cmp);
-        CD9FOREACH(secondList, val, index) {
-            mu_assert("[test_sort] The string list was not sorted properly",
-                      (char *)val == expectedResult2[index]);
-        }
+    
+    secondList->sort(secondList, test_sort_string_cmp);
+    CD9FOREACH(secondList, val, index) {
+        mu_assert("[test_sort] The string list was not sorted properly",
+                  (char *)val == expectedResult2[index]);
     }
+    
 
     cd9list_deleteList(secondList);
 
     return 0;
 }
+
 static char *all_tests() 
 {
     mu_run_test(test_createNode);
