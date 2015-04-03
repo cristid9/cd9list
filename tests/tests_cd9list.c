@@ -10,7 +10,7 @@ int tests_run = 0;
 static char *test_createNode() 
 {
     const char *data = "foo";
-    CD9Node *node = cd9list_createNode((void *)data, SIZE_ZERO);
+    CD9Node *node = cd9list_createNode(data, SIZE_ZERO);
 
     mu_assert("Error allocating the list", node != NULL);
     mu_assert("Data is not stored properly in a node", 
@@ -40,11 +40,11 @@ static char *test_getNode()
     const char *data[] = {"foo", "bar", "baz"};
     
     CD9List *list = cd9list_createList();
-    CD9Node *node = cd9list_createNode((void *)data[0], SIZE_ZERO);
+    CD9Node *node = cd9list_createNode(data[0], SIZE_ZERO);
 
-    CD9Node *node1 = cd9list_createNode((void *)data[0], SIZE_ZERO);
-    CD9Node *node2 = cd9list_createNode((void *)data[1], SIZE_ZERO);
-    CD9Node *node3 = cd9list_createNode((void *)data[2], SIZE_ZERO);    
+    CD9Node *node1 = cd9list_createNode(data[0], SIZE_ZERO);
+    CD9Node *node2 = cd9list_createNode(data[1], SIZE_ZERO);
+    CD9Node *node3 = cd9list_createNode(data[2], SIZE_ZERO);    
 
     node1->next = node2;
     node2->next = node3;
@@ -70,8 +70,7 @@ static char *test_insertCopy()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->_insertCopy(list, list->length, (void *)data[i], 
-                          strlen(data[i]) + 1);
+        list->_insertCopy(list, list->length, data[i], strlen(data[i]) + 1);
     }
 
     mu_assert("[test_inserCopy] The length of the list was not set properly\n", 
@@ -98,7 +97,7 @@ static char *test_append()
     CD9List *list = cd9list_createList();    
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
     }
 
     CD9FOREACH_(list, node, index) {
@@ -117,15 +116,15 @@ static char *test_append()
 static char *test_prepend()
 {
     const char *data[] = {"bar", "baz", "bax"};
-    const char *first = "foo";
+    const char *first  = "foo";
     
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
     }
 
-    list->prepend(list, (void *)first);
+    list->prepend(list, first);
 
     mu_assert("[test_prepend] List length was not set properly", 
               list->length == 4);
@@ -148,9 +147,9 @@ static char *test_get()
 
     CD9List *list = cd9list_createList();
     
-    list->append(list, (void *)dataAtIndex0);
-    list->append(list, (void *)dataAtIndex1);
-    list->append(list, (void *)dataAtIndex2);
+    list->append(list, dataAtIndex0);
+    list->append(list, dataAtIndex1);
+    list->append(list, dataAtIndex2);
 
     mu_assert("The index doesn't point to the right data",
         (char *)list->get(list, 0) == dataAtIndex0);
@@ -172,7 +171,7 @@ static char *test_foreach2()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
     }
     size_t i = 0;
     CD9FOREACH(list, value) {
@@ -205,7 +204,7 @@ static char *test_foreach3()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
     }
 
     CD9FOREACH(list, value, i) {
@@ -235,7 +234,7 @@ static char *test_remove()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 5; i++) {
-        list->_insertCopy(list, list->length, (void *)data[i], SIZE_ZERO);
+        list->_insertCopy(list, list->length, data[i], SIZE_ZERO);
     }
 
     status = list->remove(list, 0);
@@ -269,13 +268,13 @@ static char *test_copyNodeData()
 {
     const char *data = "foo";
 
-    CD9Node *node = cd9list_createNode((void *)data, 4);
+    CD9Node *node = cd9list_createNode(data, 4);
     void *copy = cd9list_copyNodeData(node);
 
     cd9list_deleteNode(node);
 
     mu_assert("[test_copyNodeData] The node data was not copied properly", 
-              !strcmp((void *)copy, data));
+              !strcmp(copy, data));
 
     free(copy);
 
@@ -288,8 +287,8 @@ static char *test_pop()
 
     CD9List *list = cd9list_createList();
 
-    list->append(list, (void *)data);
-    list->_insertCopy(list, list->length, (void *)data, 4);
+    list->append(list, data);
+    list->_insertCopy(list, list->length, data, 4);
 
     void *ptrToCopy = list->pop(list);
     void *ptrToData = list->pop(list);
@@ -315,8 +314,8 @@ static char *test_popleft()
 
     CD9List *list = cd9list_createList();
 
-    list->append(list, (void *)data);
-    list->_insertCopy(list, list->length, (void *)data, 4);
+    list->append(list, data);
+    list->_insertCopy(list, list->length, data, 4);
 
     void *ptrToData = list->popleft(list);
     void *ptrToCopy = list->popleft(list);
@@ -345,12 +344,12 @@ static char *test_insert()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)initialData[i]);
+        list->append(list, initialData[i]);
     }
 
-    list->insert(list, 0, (void *)toInsert[0]);
-    list->insert(list, 2, (void *)toInsert[1]);
-    list->insert(list, list->length, (void *)toInsert[2]);
+    list->insert(list, 0, toInsert[0]);
+    list->insert(list, 2, toInsert[1]);
+    list->insert(list, list->length, toInsert[2]);
 
     mu_assert("[test_insert] The list length was not set properly", 
               list->length == 6);
@@ -383,9 +382,9 @@ static char *test_find()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
         mu_assert("[test_find] The index returned by find is wrong", 
-                  list->find(list, (void *)data[i], test_find_cmp) == i);
+                  list->find(list, data[i], test_find_cmp) == i);
     }
 
     cd9list_deleteList(list);
@@ -395,13 +394,13 @@ static char *test_find()
 
 static char *test_appendCopy()
 {
-    const char *data[] = {"foo", "bar", "baz"};
+    const char *data[]   = {"foo", "bar", "baz"};
     const char *backup[] = {"foo", "bar", "baz"};
 
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->appendCopy(list, (void *)data[i], 4);
+        list->appendCopy(list, data[i], 4);
     }
 
     CD9FOREACH(list, value, index) {
@@ -417,13 +416,13 @@ static char *test_appendCopy()
 
 static char *test_prependCopy()
 {
-    const char *data[] = {"foo", "bar", "baz"};
+    const char *data[]   = {"foo", "bar", "baz"};
     const char *backup[] = {"foo", "bar", "baz"};
 
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->prependCopy(list, (void *)data[i], 4);
+        list->prependCopy(list, data[i], 4);
     }
 
     int i = 2;
@@ -445,9 +444,9 @@ static char *test_findByAddress()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
         mu_assert("[test_findByAddress] The index is not correct",
-                  list->findByAddress(list, (void *)data[i]) == i);
+                  list->findByAddress(list, data[i]) == i);
     }
 
     cd9list_deleteList(list);
@@ -457,15 +456,15 @@ static char *test_findByAddress()
 
 static char *test_findByValue()
 {
-    const char *data[] = {"foo", "bar", "baz"};
+    const char *data[]   = {"foo", "bar", "baz"};
     const char *backup[] = {"foo", "bar", "baz"};
     
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->appendCopy(list, (void *)data[i], 4);
+        list->appendCopy(list, data[i], 4);
         mu_assert("[test_findByValue] The index is wrong", 
-                  list->findByValue(list, (void *)backup[i]) == i);
+                  list->findByValue(list, backup[i]) == i);
     }
 
     cd9list_deleteList(list);
@@ -480,7 +479,7 @@ static char *test_copy()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 3; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
     }
 
     CD9List *copyList = list->copy(list);
@@ -498,7 +497,7 @@ static char *test_copy()
     list = cd9list_createList();
     
     for(int i = 0; i < 3; i++) {
-        list->appendCopy(list, (void *)data, 4);
+        list->appendCopy(list, data, 4);
     }
 
     copyList = list->copy(list);
@@ -521,12 +520,12 @@ static char *test_concat()
     
     CD9List *list1 = cd9list_createList();
     for(int i = 0; i < 3; i++) {
-        list1->append(list1, (void *)data1[i]);
+        list1->append(list1, data1[i]);
     }
 
     CD9List *list2 = cd9list_createList();
     for(int i = 0; i < 3; i++) {
-        list2->append(list2, (void *)data2[i]);
+        list2->append(list2, data2[i]);
     }
 
     CD9List *result = cd9list_concat(list1, list2);
@@ -551,10 +550,10 @@ static char *test_concat()
 static char *test_slice()
 {
     const char *data[] = {"foo", "bar", "baz", "biz"};
-    CD9List *list = cd9list_createList();
+    CD9List *list      = cd9list_createList();
 
     for(int i = 0; i < 4; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
     }
 
     CD9List *firstTwo = list->slice(list, 0, 2, 1);
@@ -603,7 +602,7 @@ static char *test_reverse()
     CD9List *list = cd9list_createList();
 
     for(int i = 0; i < 4; i++) {
-        list->append(list, (void *)data[i]);
+        list->append(list, data[i]);
     }
 
     CD9List *reversed = list->copy(list);
@@ -640,7 +639,7 @@ static char *test_sort()
 
     CD9List *firstList = cd9list_createList();
     for(int i = 0; i < 6; i++) {
-        firstList->append(firstList, (void *)&firstSet[i]);
+        firstList->append(firstList, &firstSet[i]);
     }
 
     firstList->sort(firstList, test_sort_int_cmp);
@@ -653,7 +652,7 @@ static char *test_sort()
 
     CD9List *secondList = cd9list_createList();
     for(int i = 0; i < 4; i++) {
-        secondList->append(secondList, (void *)secondSet[i]);
+        secondList->append(secondList, secondSet[i]);
     }
     // This is because I can't use multiple CD9FOREACH loops in the same 
     // functions. 
@@ -669,7 +668,8 @@ static char *test_sort()
 
     return 0;
 }
-static char *all_tests() {
+static char *all_tests() 
+{
     mu_run_test(test_createNode);
     mu_run_test(test_createList);
     mu_run_test(test_append);
