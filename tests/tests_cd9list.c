@@ -366,7 +366,7 @@ static char *test_insert()
     return 0;
 }
 
-static bool test_find_cmp(void *data, void *toFind, size_t size)
+static bool test_find_cmp(const void *data, const void *toFind, size_t size)
 {
     // In this case we can compare the addreses since the list stores the 
     // addresses to the same thing. 

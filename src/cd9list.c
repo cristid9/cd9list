@@ -4,16 +4,7 @@
 #include "cd9list.h"
 #include "callbacks.h"
 
-void cd9list_foreach(CD9List *list, CD9Callback func, void *userData) 
-{
-    size_t index = 0;
-    for(CD9Node *node = list->nodes; node != NULL; node = node->next) {
-        (*func)(node->data, index, userData);
-        index++;
-    }
-}
-
-CD9Node *cd9list_createNode(void *data, size_t size) 
+CD9Node *cd9list_createNode(const void *data, size_t size) 
 {
     CD9Node *node = malloc(sizeof(CD9Node));
     if(node == NULL) { // Malloc failed.
@@ -28,7 +19,7 @@ CD9Node *cd9list_createNode(void *data, size_t size)
         node->data = copy;
     }
     else {    
-        node->data = data;
+        memmove(&node->data, &data, sizeof(void *));
     }
     
     node->next = NULL;
@@ -37,7 +28,7 @@ CD9Node *cd9list_createNode(void *data, size_t size)
     return node;
 }
 
-CD9Node *cd9list_getNode(CD9List *list, size_t index) 
+CD9Node *cd9list_getNode(const CD9List *list, size_t index) 
 {
    CD9FOREACH_(list, node, i) {
         if(i == index) {
@@ -59,7 +50,7 @@ CD9List *cd9list_concat(CD9List *list1, CD9List *list2)
     return result;
 }
 
-void *cd9list_copyNodeData(CD9Node *node)
+void *cd9list_copyNodeData(const CD9Node *node)
 {
     // The user was careless, he shouldn't call this function on an empty
     // node.
@@ -81,32 +72,31 @@ void *cd9list_get(void *self, size_t index)
     return node->data;
 }
 
-void cd9list_append(void *self, void *data)
+void cd9list_append(void *self, const void *data)
 {
     CD9List *list = (CD9List *)self;
     list->_insertCopy(list, list->length, data, SIZE_ZERO);
 }
 
-void cd9list_appendCopy(void *self, void *data, size_t size)
+void cd9list_appendCopy(void *self, const void *data, size_t size)
 {
     CD9List *list = (CD9List *)self;
     list->_insertCopy(list, list->length, data, size);
 }
 
-// %todo% write tests and docs for this function.
-void cd9list_insert(void *self, size_t index, void *data)
+void cd9list_insert(void *self, size_t index, const void *data)
 {
     CD9List *list = (CD9List *)self;
     list->_insertCopy(list, index, data, SIZE_ZERO);
 }
 
-void cd9list_prepend(void *self, void *data)
+void cd9list_prepend(void *self, const void *data)
 {
     CD9List *list = (CD9List *)self;
     list->_insertCopy(list, 0, data, SIZE_ZERO);
 }
 
-void cd9list_prependCopy(void *self, void *data, size_t size)
+void cd9list_prependCopy(void *self, const void *data, size_t size)
 {
     CD9List *list = (CD9List *)self;
     list->_insertCopy(list, 0, data, size);
@@ -168,7 +158,10 @@ void cd9list_reverse(void *self)
     list->nodes = prev;
 }
 
-void cd9list_insertCopy(void *self, size_t index, void *data, size_t size)
+void cd9list_insertCopy(void       *self, 
+                        size_t     index, 
+                        const void *data, 
+                        size_t     size)
 {
     CD9List *list = (CD9List *)self;
 
@@ -260,7 +253,7 @@ int cd9list_remove(void *self, size_t index)
     return 1; // Removed successfully.
 }
 
-int cd9list_find(void *self, void *toFind, CD9FindCallback cmp)
+int cd9list_find(void *self, const void *toFind, CD9FindCallback cmp)
 {
     CD9List *list = (CD9List *)self;
 
@@ -272,14 +265,14 @@ int cd9list_find(void *self, void *toFind, CD9FindCallback cmp)
     return -1;
 }
 
-int cd9list_findByAddress(void *self, void *data) 
+int cd9list_findByAddress(void *self, const void *data) 
 {
     CD9List *list = (CD9List *)self;
 
     return list->find(list, data, callbacks_findByAddressCmp);
 }
 
-int cd9list_findByValue(void *self, void *data)
+int cd9list_findByValue(void *self, const void *data)
 {
     CD9List *list = (CD9List *)self;
 

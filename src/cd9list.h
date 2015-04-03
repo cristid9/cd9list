@@ -23,7 +23,9 @@
  * @return bool It returns `true` if the 2 values are equal and `false` 
  *         otherwise.
  */
-typedef bool (*CD9FindCallback)(void *data, void *toFind, size_t size);
+typedef bool (*CD9FindCallback)(const void *data, 
+                                const void *toFind, 
+                                size_t     size);
 
 /*
  *  
@@ -49,7 +51,7 @@ typedef struct CD9List {
      *
      * @return void It doesn't return anything.
      */
-    void (*append)(void *self, void *data);
+    void (*append)(void *self, const void *data);
 
     /**
      * @brief Use this function when you want to append a copy of the data
@@ -70,7 +72,7 @@ typedef struct CD9List {
      *
      * @return void It doesn't return anything.
      */
-    void (*appendCopy)(void *self, void *data, size_t size);
+    void (*appendCopy)(void *self, const void *data, size_t size);
 
     /**
      * @brief Call this function whenever you want to add a new node at the 
@@ -81,7 +83,7 @@ typedef struct CD9List {
      *
      * @return void It doesn't return anything.
      */
-    void (*prepend)(void *self, void *data);
+    void (*prepend)(void *self, const void *data);
 
     /**
      * @brief This function is similar to \ref appendCopy, the only difference
@@ -93,7 +95,7 @@ typedef struct CD9List {
      *
      * @return void It doesn't return anything.
      */ 
-    void (*prependCopy)(void *self, void *data, size_t size);
+    void (*prependCopy)(void *self, const void *data, size_t size);
     
     /**
      * @brief Call this function to get the data of the node stored at that 
@@ -140,7 +142,7 @@ typedef struct CD9List {
      *
      * @return void It doesn't return anything.
      */ 
-    void (*insert)(void *self, size_t index, void *data);
+    void (*insert)(void *self, size_t index, const void *data);
 
     /**
      * @brief Use this function to get the index of the first occurence of
@@ -154,7 +156,7 @@ typedef struct CD9List {
      * @return size_t The index of the element you are looking for. If there is
      *         no match for your query it will return `-1`.
      */ 
-    int (*find)(void *self, void *data, CD9FindCallback cmp);
+    int (*find)(void *self, const void *data, CD9FindCallback cmp);
 
     /**
      * @brief This function is a wrapper over `cd9list_find`. It is intended
@@ -166,7 +168,7 @@ typedef struct CD9List {
      *
      * @return int See the return type of \ref `cd9list_find`.
      */ 
-    int (*findByAddress)(void *self, void *data);
+    int (*findByAddress)(void *self, const void *data);
 
     /**
      * @brief Wrapper for `cd9list_find`. It is intended to make your life 
@@ -178,7 +180,7 @@ typedef struct CD9List {
      *
      * @return int See the return value for \ref `cd9list_find`.
      */ 
-    int (*findByValue)(void *self, void *data);
+    int (*findByValue)(void *self, const void *data);
 
     /**
      * @brief Use this function to remove the element at the index specified
@@ -209,7 +211,10 @@ typedef struct CD9List {
      *
      * @return void It doesn't return anything.
      */ 
-    void (*_insertCopy)(void *self, size_t index, void *value, size_t size);
+    void (*_insertCopy)(void       *self,
+                        size_t     index, 
+                        const void *value, 
+                        size_t     size);
 
     /**
      * @brief Use this function to reverse the current list.
@@ -352,7 +357,7 @@ typedef void (*CD9Callback)(void *item, size_t index, void *userData);
  * @retur \ref CD9Node A pointer to the node that was created.
  *
  */
-CD9Node *cd9list_createNode(void *data, size_t size);
+CD9Node *cd9list_createNode(const void *data, size_t size);
 
 /**
  * @brief Use this function to allocate memory for a new list.
@@ -391,7 +396,7 @@ void cd9list_deleteNode(CD9Node *node);
  *
  * @return CD9Node * A pointer to the desired node.
  */
-CD9Node *cd9list_getNode(CD9List *list, size_t index);
+CD9Node *cd9list_getNode(const CD9List *list, size_t index);
 
 /**
  * @brief This function is mainly used as a helper function in `pop` and 
@@ -413,7 +418,7 @@ CD9Node *cd9list_getNode(CD9List *list, size_t index);
  *
  * @brief CD9Node * A of the `node`'s data.
  */ 
-void *cd9list_copyNodeData(CD9Node *node);
+void *cd9list_copyNodeData(const CD9Node *node);
 
 /**
  * @brief Use this function to concatenate 2 lists. It returns a pointer to

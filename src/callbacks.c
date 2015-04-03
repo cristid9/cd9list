@@ -2,7 +2,9 @@
 #include <stdbool.h>
 #include "cd9list.h"
 
-bool callbacks_findByAddressCmp(void *value, void *toFind, size_t size)
+bool callbacks_findByAddressCmp(const void *value, 
+                                const void *toFind, 
+                                size_t     size)
 {
     // Since the list just stores the value to the original data we can
     // simply compare them.
@@ -13,7 +15,9 @@ bool callbacks_findByAddressCmp(void *value, void *toFind, size_t size)
     return false;
 }
 
-bool callbacks_findByValueCmp(void *value, void *toFind, size_t size)
+bool callbacks_findByValueCmp(const void *value, 
+                              const void *toFind, 
+                              size_t     size)
 {
     if(!memcmp(value, toFind, size)) {
         return true;
