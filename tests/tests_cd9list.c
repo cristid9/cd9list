@@ -667,6 +667,39 @@ static char *test_sort()
     return 0;
 }
 
+static bool test_filter_cmp(const void *item, const void *data, size_t size)
+{
+    if((char *)item == (char *)data) {
+        return true;
+    }
+    
+    return false;
+}
+
+static char *test_filter()
+{
+    const char *data[] = {"good", "bad"};
+    CD9List *list      = cd9list_createList();
+    
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 2; j++) {
+            list->append(list, data[j]);    
+        }
+    }
+
+    CD9List *filteredList = list->filter(list, data[1], test_filter_cmp);
+    mu_assert("x", filteredList->length == 3);
+    for(int i = 0; i < 3; i++) {
+        mu_assert("[test_filter] List is not filtered properly", 
+                  filteredList->get(filteredList, i) == data[0]);
+    }
+
+    cd9list_deleteList(list);
+    cd9list_deleteList(filteredList);
+
+    return 0;
+}
+
 static char *all_tests() 
 {
     mu_run_test(test_createNode);
@@ -694,6 +727,7 @@ static char *all_tests()
     mu_run_test(test_slice);
     mu_run_test(test_reverse);
     mu_run_test(test_sort);
+    mu_run_test(test_filter);
 
     return 0;
 }

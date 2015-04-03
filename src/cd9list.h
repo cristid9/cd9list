@@ -12,9 +12,10 @@
 
 /**
  * @brief This is the signature of the callback you will pass to to 
- *        `cd9list_find` in order to find an element. This function will be
- *        called on every element in the list, so `data` will have by turn
- *        the value of every element in the list.
+ *        every function that needs a comparator in order to see if 2 values
+ *        are equal, `cd9list_find` or `cd9list_filter` are good examples. 
+ *        This function will be called on every element in the list, so 
+ *        `data` will have by turn the value of every element in the list.
  * 
  * @param data An element in the list.
  * @param toFind The data you want to find.
@@ -269,6 +270,20 @@ typedef struct CD9List {
      * @return void It doesn't return anything.        
      */ 
     void (*sort)(void *self, int (*cmp)(const void *a, const void *b));
+
+    /**
+     * @brief Use this function to filter a list by particular elements.
+     *
+     * @param self The current list.
+     * @param data This data will e passed to the `cmp` at every call.
+     * @param cmp The comparator function used to determine if an element
+     *        should be filtered. 
+     *
+     * @return CD9List * It returns the filtered list.
+     */
+    struct CD9List *(*filter)(void           *self, 
+                                      const void     *data,
+                                      CD9FindCallback cmp);
 } CD9List;
 
 

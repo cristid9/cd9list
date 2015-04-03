@@ -138,6 +138,22 @@ void *cd9list_popleft(void *self)
     return tmp;
 }
 
+CD9List *cd9list_filter(void           *self, 
+                        const void     *data,
+                        CD9FindCallback cmp)
+{
+    CD9List *list         = (CD9List *)self;
+    CD9List *filteredList = cd9list_createList();
+
+    CD9FOREACH_(list, node) {
+        if(!cmp(node->data, data, node->size)) {
+            filteredList->appendCopy(filteredList, node->data, node->size);        
+        }
+    }
+
+    return filteredList;
+}    
+
 void cd9list_reverse(void *self)
 {
     CD9List *list = (CD9List *)self;
@@ -176,9 +192,10 @@ void cd9list_insertCopy(void       *self,
 
         return;
     }
-    CD9Node *beforeDesiredNode = cd9list_getNode(list, index - 1);
-    CD9Node *tmp = beforeDesiredNode->next;
-    CD9Node *node = cd9list_createNode(data, size);
+ 
+    CD9Node *beforeDesiredNode = cd9list_getNode(list, index - 1); 
+    CD9Node *tmp               = beforeDesiredNode->next;
+    CD9Node *node              = cd9list_createNode(data, size);
     
     // Adjust the links.
     beforeDesiredNode->next = node;
@@ -422,6 +439,7 @@ CD9List *cd9list_createList()
     list->slice          = cd9list_slice;
     list->reverse        = cd9list_reverse;
     list->sort           = cd9list_sort;
+    list->filter         = cd9list_filter;
 
     return list;
 }
