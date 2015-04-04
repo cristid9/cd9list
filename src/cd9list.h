@@ -281,9 +281,31 @@ typedef struct CD9List {
      *
      * @return CD9List * It returns the filtered list.
      */
-    struct CD9List *(*filter)(void           *self, 
-                                      const void     *data,
-                                      CD9FindCallback cmp);
+    struct CD9List *(*filter)(void            *self, 
+                              const void      *data,
+                              CD9FindCallback cmp);
+    /**
+     * @brief You will use this function in order to filter a list by a given 
+     *        value, but this time you don't have to provide a comparator, 
+     *        since the built-in comparator will be used.
+     *
+     * @param self The current list.
+     * @param data The value that will be eliminated from this list.
+     *
+     * @return CD9List * The filtered list.  
+     */ 
+    struct CD9List *(*filterByValue)(void *self, const void *data);
+
+    /**
+     * @brief You will, usually, use this function when you want to eliminate
+     *        more than one value from a list.
+     *
+     * @param self The current list.
+     * @param set The values that will be eliminated from list.
+     *
+     * @return CD9List * The filtered list.
+     */ 
+    struct CD9List *(*filterBySet)(void *self, struct CD9List *set);
 } CD9List;
 
 

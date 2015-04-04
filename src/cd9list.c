@@ -154,6 +154,48 @@ CD9List *cd9list_filter(void           *self,
     return filteredList;
 }    
 
+CD9List *cd9list_filterByValue(void *self, const void *data)
+{
+    CD9List *list     = (CD9List *)self;
+    CD9List *filtered = cd9list_createList();
+
+    CD9FOREACH_(list, node) {
+        if(node->size == SIZE_ZERO) {
+            if(!callbacks_findByAddressCmp(node->data, data, 0)) {
+                filtered->appendCopy(filtered, node->data, node->size);
+            }
+        }
+        else {
+            if(!callbacks_findByValueCmp(node->data, data, node->size)) {
+                filtered->appendCopy(filtered, node->data, node->size);
+            }
+        }
+    }
+
+    return filtered;
+}
+
+CD9List *cd9list_filterBySet(void *self, CD9List *set)
+{
+    CD9List *list     = (CD9List *)self;
+    CD9List *filtered = cd9list_createList();
+
+    CD9FOREACH_(list, node) {
+        if(node->size == SIZE_ZERO) {
+            if(set->findByAddress(set, node->data) == -1) {
+                filtered->appendCopy(filtered, node->data, node->size);
+            }
+        }
+        else {
+            if(set->findByValue(set, node->data) == -1) {
+                filtered->appendCopy(filtered, node->data, node->size);
+            }
+        }
+    }
+
+    return filtered;
+}
+
 void cd9list_reverse(void *self)
 {
     CD9List *list = (CD9List *)self;
@@ -440,6 +482,8 @@ CD9List *cd9list_createList()
     list->reverse        = cd9list_reverse;
     list->sort           = cd9list_sort;
     list->filter         = cd9list_filter;
+    list->filterByValue  = cd9list_filterByValue;
+    list->filterBySet    = cd9list_filterBySet;
 
     return list;
 }

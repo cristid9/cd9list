@@ -700,6 +700,62 @@ static char *test_filter()
     return 0;
 }
 
+static char *test_filterByValue()
+{
+    const char *data[] = {"good", "bad"};
+    CD9List *list      = cd9list_createList();
+
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 2; j++) {
+            list->append(list, data[j]);
+        }
+    }
+
+    CD9List *filtered = list->filterByValue(list, data[1]);
+    for(int i = 0; i < 3; i++) {
+        mu_assert("[test_filterByValue] The list was not filtered properly", 
+                  filtered->get(filtered, i) == data[0]);
+    }
+
+    cd9list_deleteList(filtered);
+    cd9list_deleteList(list);
+    
+    return 0;
+}
+
+static char *test_filterBySet()
+{
+    const char *data[]       = {"a", "b", "c"};
+    const char *filterData[] = {data[1], data[2]};
+
+    
+    CD9List *filterList = cd9list_createList();
+    CD9List *list       = cd9list_createList();
+
+    for(int i = 0; i < 2; i++) {
+        filterList->append(filterList, filterData[i]);
+    }
+
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            list->append(list, data[j]);
+        }
+    }
+
+    CD9List *filtered = list->filterBySet(list, filterList);
+    
+    for(int i = 0; i < 3; i++) {
+        mu_assert("[test_filterBySet] The list was not filtered properly", 
+                  filtered->get(filtered, i) == data[0]);
+    }
+
+    cd9list_deleteList(filterList);
+    cd9list_deleteList(list);
+    cd9list_deleteList(filtered);
+
+    return 0;
+}
+
 static char *all_tests() 
 {
     mu_run_test(test_createNode);
@@ -728,6 +784,8 @@ static char *all_tests()
     mu_run_test(test_reverse);
     mu_run_test(test_sort);
     mu_run_test(test_filter);
+    mu_run_test(test_filterByValue);
+    mu_run_test(test_filterBySet);
 
     return 0;
 }

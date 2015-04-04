@@ -5,7 +5,7 @@ LIB_OPTIONS     = -shared -o
 BINARY_LOCATION = ./bin/libcd9list.so
 OBJECT_FILES    = callbacks.o cd9list.o
 TEST_FILES      = ./tests/tests_cd9list.c
-TEST_FLAGS      = -Wall -std=c99 -lcd9list -o
+TEST_FLAGS      = -Wall -std=c99 -g -lcd9list -o
 TEST_BINARY     = ./bin/tests
 
 all:
