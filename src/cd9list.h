@@ -28,9 +28,15 @@ typedef bool (*CD9FindCallback)(const void *data,
                                 const void *toFind, 
                                 size_t     size);
 
-/*
- *  
+/**
+ * @brief A node is an object in memory that holds the a pointer to the actual
+ *        data and a pointer to the next element in the list.  
  *
+ * @var CD9Node::data A pointer to the data stored by the user.
+ * @var CD9Node::next A pointer to the next node in the list.
+ * @var CD9Node::size If the user stored a copy of the data in the list, for
+ *      example using `cd9list_appendCopy` this memeber will store the number
+ *      of bytes ocupied by the copy.   
  *
  */  
 typedef struct CD9Node {
@@ -39,6 +45,13 @@ typedef struct CD9Node {
     size_t size;
 } CD9Node;
 
+/**
+ * @brief This structure is used to group logic of the list.
+ *
+ * @var CD9List::length The number of the elements in the list.
+ * @var CD9List::nodes Pointer to the first node in the list.
+ *
+ */ 
 typedef struct CD9List {
     size_t length;
     CD9Node *nodes;   
@@ -382,7 +395,7 @@ typedef struct CD9List {
 typedef void (*CD9Callback)(void *item, size_t index, void *userData);
 
 
-/*
+/**
  * @brief Use this function to create a new node in a list.
  *
  * @param data The value of the new node.
@@ -403,7 +416,7 @@ CD9Node *cd9list_createNode(const void *data, size_t size);
  */
 CD9List *cd9list_createList();
 
-/*
+/**
  * @brief Use this function to free the memeory allocated to a list. It will
  *        delete all its elements.
  *  
