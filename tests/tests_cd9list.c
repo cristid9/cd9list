@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <cd9/cd9list.h>
 #include "minunit.h"
-#include "../src/cd9list.h"
 
 int tests_run = 0;
   
