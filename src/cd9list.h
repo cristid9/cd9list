@@ -1,6 +1,7 @@
-#ifndef CD9LIST_H_
-#define CD9LIST_H_
+#ifndef CD9LIST_H__
+#define CD9LIST_H__
 
+#include <stdio.h>
 #include "va_numargs.h"
 #include "macro_dispatcher.h"
 #include <stdbool.h>
@@ -482,21 +483,5 @@ void *cd9list_copyNodeData(const CD9Node *node);
  */ 
 CD9List *cd9list_concat(CD9List *list1, CD9List *list2);
 
-/**
- * @brief Use this function to iterate over all the elements in the list.
- *
- * @param list The list you want to iterate through.
- * @param func A pointer to the function that will be called on every element
- *        on the list. Its first parameter is the data of every node(the 
- *        element) and the second parameter is the index of that element, and 
- *        the third will be passed to func at every call. Thus, the signature
- *        of the function is the following one:
- *        `void (*func)(void *item, size_t index, void *userData)`
- * @param userData This will be passed to `func` at every call. Pass `NULL`
- *        if you don't want to pass anything.       
- *
- * @return void It doesn't return anything.
- */
-void cd9list_foreach(CD9List *list, CD9Callback func, void  *userData);
 
-#endif // CD9LIST_H_
+#endif // CD9LIST_H__
