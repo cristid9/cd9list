@@ -12,9 +12,10 @@ You should be aware of the fact that this library uses the `C99` standard.
 Building the library
 ====================
 
-    In order to build the library on your local machine, you have to clone the 
+   In order to build the library on your local machine, you have to clone the 
 project first. After that go in to the directory where the library resides and 
 run the following commands:
+
 ```
 make
 sudo make install
@@ -38,7 +39,7 @@ Tutorial
 1. Creating and deleting lists
 ------------------------------
 
-    The function that you will use in order to create a list is 
+   The function that you will use in order to create a list is 
 `cd9list_createList`. After you have done working with the list you will delete
 the list using the function `cd9list_deleteList`. The following snippet 
 ilutrates the concepts:
@@ -68,7 +69,7 @@ gcc -Wall -std=c99 creating_and_deleting_lists.c -lcd9list
 2. Adding elements
 ------------------
     
-    The 2 main functions used for adding elements to an existing list are 
+   The 2 main functions used for adding elements to an existing list are 
 `append` and `prepend`. There are also some other functions, but they work
 similarly. You will pass to both of this functions a pointer to the value
 you want to store in the list. Take a look at the following snippet:
@@ -118,7 +119,7 @@ gcc -Wall append_prepend_and_get.c -std=c99 -lcd9list
 3. CD9FOREACH loop
 ------------------
 
-    The list provides a loop that will make your life easier while dealing with
+   The list provides a loop that will make your life easier while dealing with
 the datastructures in the library. Take a look at the following example that
 prints the elements in a list and then prints the elemnts in a reversed copy
 of the list(we used the copy functions just to ilustrate how functions similar
@@ -174,7 +175,7 @@ gcc -Wall -std=c99 foreach_example.c  -lcd9list
 4. *Copy functions
 ------------------
 
-    You maybe have noticed that there are some functions thet have the `Copy`
+   You maybe have noticed that there are some functions thet have the `Copy`
 suffix. In order to understand them it is very important to understand that
 when you append/prepend/insert something into a list you actually add the
 address of that value, not the value itself. There are no problems if the
