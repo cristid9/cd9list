@@ -9,6 +9,11 @@ a very easy one to use.
 
 You should be aware of the fact that this library uses the `C99` standard.
 
+The documentation of the library is here: 
+```
+http://cristid9.github.io/cd9list/annotated.html
+```
+
 Building the library
 ====================
 
@@ -175,7 +180,7 @@ gcc -Wall -std=c99 foreach_example.c  -lcd9list
 4. *Copy functions
 ------------------
 
-   You maybe have noticed that there are some functions thet have the `Copy`
+   You maybe have noticed that there are some functions that have the `Copy`
 suffix. In order to understand them it is very important to understand that
 when you append/prepend/insert something into a list you actually add the
 address of that value, not the value itself. There are no problems if the
