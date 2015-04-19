@@ -49,7 +49,7 @@ Tutorial
 the list using the function `cd9list_deleteList`. The following snippet 
 ilutrates the concepts:
 
-```
+```C
 // creating_and_deleting_lists.c
 #include <cd9/cd9list.h>
 
@@ -79,7 +79,7 @@ gcc -Wall -std=c99 creating_and_deleting_lists.c -lcd9list
 similarly. You will pass to both of this functions a pointer to the value
 you want to store in the list. Take a look at the following snippet:
 
-```
+```C
 // append_prepend_and_get.c
 #include <stdio.h>
 #include <cd9/cd9list.h>
@@ -130,7 +130,7 @@ prints the elements in a list and then prints the elemnts in a reversed copy
 of the list(we used the copy functions just to ilustrate how functions similar
 to it works):
 
-```
+```C
 // foreach_example.c
 #include <stdio.h>
 #include <cd9/cd9list.h>
